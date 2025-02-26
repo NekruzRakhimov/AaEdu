@@ -1,6 +1,27 @@
 #### LMS (CRM) - aa.edu
 Описание: Платформа для управления образовательным учреждением
 
+#### Основные сущности
+Пользователь - User
+id - int (unique)
+username - string
+fullname - string
+email - string (unique)
+birth_date - time
+created_at - time
+updated_at - time
+deleted_at - time
+
+Курс - courses
+id - int(unique)
+
+users_courses
+user_id - int
+course_id - int
+
+Отношения:
+users_courses.user_id -> users.id & users_courses.course_id -> courses.id
+
 #### Основной функционал
 1. Регистрация / Вход
 2. Две роли: ментор, ученик, админ
