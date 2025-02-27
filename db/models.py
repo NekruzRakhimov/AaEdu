@@ -18,7 +18,7 @@ class User(Base):
     password = Column(String, unique=True, nullable=False)
     birth_date = Column(DateTime)
     created_at = Column(DateTime, default=datetime.datetime.now)
-    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
+    updated_at = Column(DateTime, nullable=True)
     deleted_at = Column(DateTime, nullable=True)
 
 
@@ -26,9 +26,6 @@ class Role(Base):
     __tablename__ = "roles"
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.datetime.now)
-    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
-    deleted_at = Column(DateTime, nullable=True)
 
 
 class UserRole(Base):
@@ -41,7 +38,6 @@ class Course(Base):
     __tablename__ = "courses"
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    price = Column(Integer)
     created_at = Column(DateTime, default=datetime.datetime.now)
     updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
     deleted_at = Column(DateTime, nullable=True)
@@ -62,11 +58,10 @@ class Lesson(Base):
     description = Column(Text)
     content = Column(Text)
     created_at = Column(DateTime, default=datetime.datetime.now)
-    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
+    updated_at = Column(DateTime, nullable=True)
     deleted_at = Column(DateTime, nullable=True)
 
-
-class Homework(Base):
+'''class Homework(Base):
     __tablename__ = "homeworks"
     id = Column(Integer, primary_key=True)
     lesson_id = Column(Integer, ForeignKey("lessons.id"))
@@ -100,6 +95,8 @@ class Schedule(Base):
     lesson_id = Column(Integer, ForeignKey("lessons.id"))
     teacher_id = Column(Integer, ForeignKey("users.id"))
     scheduled_time = Column(DateTime, nullable=False)
+'''
+
 
 
 def migrate_tables():
