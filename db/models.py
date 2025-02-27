@@ -10,96 +10,106 @@ class Base(DeclarativeBase):
     pass
 
 
+# Таблица пользователей (студенты, родители, преподаватели, администраторы)
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
-    full_name = Column(String)
-    username = Column(String, unique=True, nullable=False)
-    password = Column(String, unique=True, nullable=False)
-    birth_date = Column(DateTime)
-    created_at = Column(DateTime, default=datetime.datetime.now)
-    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
-    deleted_at = Column(DateTime, nullable=True)
+    full_name = Column(String)   # Полное имя
+    username = Column(String, unique=True, nullable=False)  # Логин пользователя
+    password = Column(String, unique=True, nullable=False)  # Пароль (должен быть хеширован)
+    birth_date = Column(DateTime)  # Дата рождения
+    created_at = Column(DateTime, default=datetime.datetime.now)  # Дата создания аккаунта
+    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
+    deleted_at = Column(DateTime, nullable=True)  # Дата удаления (если пользователь был удален)
 
 
+# Таблица ролей (Студент, Преподаватель, Администратор, Родитель)
 class Role(Base):
     __tablename__ = "roles"
     id = Column(Integer, primary_key=True)
-    name = Column(String, unique=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.datetime.now)
-    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
-    deleted_at = Column(DateTime, nullable=True)
+    name = Column(String, unique=True, nullable=False)  # Название роли
+    created_at = Column(DateTime, default=datetime.datetime.now)  # Дата создания
+    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
+    deleted_at = Column(DateTime, nullable=True)  # Дата удаления
 
 
+# Таблица связей между пользователями и ролями (многие ко многим)
 class UserRole(Base):
     __tablename__ = "user_roles"
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
-    role_id = Column(Integer, ForeignKey("roles.id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)  # ID пользователя
+    role_id = Column(Integer, ForeignKey("roles.id"), primary_key=True)  # ID роли
 
 
+# Таблица курсов (каждый курс может содержать несколько уроков)
 class Course(Base):
     __tablename__ = "courses"
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    price = Column(Integer)
-    created_at = Column(DateTime, default=datetime.datetime.now)
-    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
-    deleted_at = Column(DateTime, nullable=True)
+    name = Column(String, nullable=False)  # Название курса
+    price = Column(Integer)  # Стоимость курса
+    created_at = Column(DateTime, default=datetime.datetime.now)   # Дата создания
+    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
+    deleted_at = Column(DateTime, nullable=True)  # Дата удаления
 
 
+# Таблица связи пользователей и курсов (многие ко многим: кто записан на курс)
 class CourseUser(Base):
     __tablename__ = "course_users"
-    course_id = Column(Integer, ForeignKey("courses.id"), primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
-    role_in_course = Column(String)
+    course_id = Column(Integer, ForeignKey("courses.id"), primary_key=True)  # ID курса
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)  # ID пользователя
+    role_in_course = Column(String)  # Роль пользователя в курсе ('student', 'teacher')
 
 
+# Таблица уроков (содержит информацию об уроках внутри курса)
 class Lesson(Base):
     __tablename__ = "lessons"
     id = Column(Integer, primary_key=True)
-    course_id = Column(Integer, ForeignKey("courses.id"))
-    title = Column(String, nullable=False)
-    description = Column(Text)
-    content = Column(Text)
-    created_at = Column(DateTime, default=datetime.datetime.now)
-    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
-    deleted_at = Column(DateTime, nullable=True)
+    course_id = Column(Integer, ForeignKey("courses.id"))   # ID курса, к которому принадлежит урок
+    title = Column(String, nullable=False)  # Название урока
+    description = Column(Text)  # Описание урока
+    content = Column(Text)  # Учебные материалы (можно хранить ссылки на файлы)
+    created_at = Column(DateTime, default=datetime.datetime.now)   # Дата создания
+    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
+    deleted_at = Column(DateTime, nullable=True)   # Дата удаления
 
 
+# Таблица домашних заданий (содержит оценки за выполненные задания)
 class Homework(Base):
     __tablename__ = "homeworks"
     id = Column(Integer, primary_key=True)
-    lesson_id = Column(Integer, ForeignKey("lessons.id"))
-    student_id = Column(Integer, ForeignKey("users.id"))
-    score = Column(DECIMAL(5, 2))
-    submission_date = Column(DateTime, default=datetime.datetime.now)
+    lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока
+    student_id = Column(Integer, ForeignKey("users.id"))  # ID студента
+    score = Column(DECIMAL(5, 2))  # Оценка за задание
+    submission_date = Column(DateTime, default=datetime.datetime.now)  # Дата сдачи домашнего задания
 
 
+# Таблица посещаемости (фиксирует, кто посетил урок)
 class Attendance(Base):
     __tablename__ = "attendances"
     id = Column(Integer, primary_key=True)
-    lesson_id = Column(Integer, ForeignKey("lessons.id"))
-    user_id = Column(Integer, ForeignKey("users.id"))
-    attended = Column(Boolean)
-    attendance_date = Column(DateTime, default=datetime.datetime.now)
+    lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока
+    user_id = Column(Integer, ForeignKey("users.id"))  # ID студента
+    attended = Column(Boolean)  # Был ли студент на занятии (True = Да, False = Нет)
+    attendance_date = Column(DateTime, default=datetime.datetime.now)  # Дата посещения
 
 
+# Лента событий (лог действий: обновления оценок, новые уроки и т. д.)
 class Event(Base):
     __tablename__ = "events"
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    event_type = Column(String)
-    event_description = Column(Text)
-    created_at = Column(DateTime, default=datetime.datetime.now)
+    user_id = Column(Integer, ForeignKey("users.id"))  # ID пользователя, связанного с событием
+    event_type = Column(String)  # Тип события ('обновление оценки', 'новый урок')
+    event_description = Column(Text)  # Описание события
+    created_at = Column(DateTime, default=datetime.datetime.now)  # Дата события
 
 
+# Таблица расписания (расписание занятий для студентов и преподавателей)
 class Schedule(Base):
     __tablename__ = "schedules"
     id = Column(Integer, primary_key=True)
-    course_id = Column(Integer, ForeignKey("courses.id"))
-    lesson_id = Column(Integer, ForeignKey("lessons.id"))
-    teacher_id = Column(Integer, ForeignKey("users.id"))
-    scheduled_time = Column(DateTime, nullable=False)
+    course_id = Column(Integer, ForeignKey("courses.id"))  # ID курса
+    lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока
+    teacher_id = Column(Integer, ForeignKey("users.id"))  # ID преподавателя
+    scheduled_time = Column(DateTime, nullable=False)  # Дата и время занятия
 
 
 def migrate_tables():
