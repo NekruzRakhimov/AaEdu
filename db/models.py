@@ -66,10 +66,33 @@ class Lesson(Base):
     course_id = Column(Integer, ForeignKey("courses.id"))   # ID курса, к которому принадлежит урок
     title = Column(String, nullable=False)  # Название урока
     description = Column(Text)  # Описание урока
-    content = Column(Text)  # Учебные материалы (можно хранить ссылки на файлы)
     created_at = Column(DateTime, default=datetime.datetime.now)   # Дата создания
     updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
     deleted_at = Column(DateTime, nullable=True)   # Дата удаления
+
+
+# Таблица материалов для уроков
+class LessonMaterial(Base):
+    __tablename__ = "lesson_materials"
+    id = Column(Integer, primary_key=True)
+    lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока, к которому принадлежит материал
+    material_type = Column(String)  # file, link, text
+    content = Column(Text, nullable=False)  # Содержимое материала
+    created_at = Column(DateTime, default=datetime.datetime.now)  # Двта создания
+    # updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
+    # deleted_at = Column(DateTime, nullable=True)  # Дата удаления
+
+
+# Таблица комментариев к урокам
+class Comment(Base):
+    __tablename__ = "comments"
+    id = Column(Integer, primary_key=True)
+    lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока, к которому принадлежит коммент
+    user_id = Column(Integer, ForeignKey("users.id"))  # ID пользователя, к которому принадлежит коммент
+    content = Column(Text, nullable=False)  # Текст комментария
+    created_at = Column(DateTime, default=datetime.datetime.now)  # Двта создания
+    # updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
+    # deleted_at = Column(DateTime, nullable=True)  # Дата удаления
 
 
 # Таблица домашних заданий (содержит оценки за выполненные задания)
@@ -87,9 +110,18 @@ class Attendance(Base):
     __tablename__ = "attendances"
     id = Column(Integer, primary_key=True)
     lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока
-    user_id = Column(Integer, ForeignKey("users.id"))  # ID студента
+    student_id = Column(Integer, ForeignKey("users.id"))  # ID студента
     attended = Column(Boolean)  # Был ли студент на занятии (True = Да, False = Нет)
     attendance_date = Column(DateTime, default=datetime.datetime.now)  # Дата посещения
+
+
+# Аналитика успеваемости студента
+class StudentPerformance(Base):
+    __tablename__ = "student_performances"
+    id = Column(Integer, primary_key=True)
+    student_id = Column(Integer, ForeignKey("users.id"))  # ID студента
+    avg_score = Column(DECIMAL(5, 2))  # Средний балл
+    attendance_rate = Column(DECIMAL(5, 2))  # Процент посещаемости
 
 
 # Лента событий (лог действий: обновления оценок, новые уроки и т. д.)
@@ -99,6 +131,7 @@ class Event(Base):
     user_id = Column(Integer, ForeignKey("users.id"))  # ID пользователя, связанного с событием
     event_type = Column(String)  # Тип события ('обновление оценки', 'новый урок')
     event_description = Column(Text)  # Описание события
+    related_id = Column(Integer)  # ID связанного объекта (урока, курса, комментария и т. д.)
     created_at = Column(DateTime, default=datetime.datetime.now)  # Дата события
 
 
