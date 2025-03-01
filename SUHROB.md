@@ -54,7 +54,15 @@ scorpe
 
 Журнал посещении
 
-Лента событий
+Event:
 
-Расписании
+Timetable
+
+Comment (Комментарии к уроку)
+id - unique
+lesson_id
+user_id
+content - string
+created_at - time
+
 
