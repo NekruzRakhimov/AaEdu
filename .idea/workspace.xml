@@ -1,4 +1,167 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PropertiesComponent">{}</component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9d4fdc9b-c80a-4d78-9f96-9bacce1b538e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/configs/config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/configs/config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db/postgres.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logger/logger.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/controllers/curs.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/controllers/default.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/controllers/lesson.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/controllers/middlewares.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/controllers/stedunt.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/auth.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/hash.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ruslan.md" beforeDir="false" afterPath="$PROJECT_DIR$/info/Ruslan.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SUHROB.md" beforeDir="false" afterPath="$PROJECT_DIR$/info/SUHROB.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abubakr.md" beforeDir="false" afterPath="$PROJECT_DIR$/info/abubakr.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doro.md" beforeDir="false" afterPath="$PROJECT_DIR$/info/doro.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/huseyn.md" beforeDir="false" afterPath="$PROJECT_DIR$/info/huseyn.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/maruf.md" beforeDir="false" afterPath="$PROJECT_DIR$/info/maruf.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/salikhov.md" beforeDir="false" afterPath="$PROJECT_DIR$/info/salikhov.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sherzod.md" beforeDir="false" afterPath="$PROJECT_DIR$/info/sherzod.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tarona.md" beforeDir="false" afterPath="$PROJECT_DIR$/info/tarona.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FastAPI main" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="crud-for-lesson-comments" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="suhrob" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;KaraSu31&quot;
+  }
+}</component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="crud-for-lesson-comments" />
+                    <option name="lastUsedInstant" value="1740822810" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="suhrob" />
+                    <option name="lastUsedInstant" value="1740822809" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/NekruzRakhimov/AaEdu.git&quot;,
+    &quot;accountId&quot;: &quot;487252a6-722e-4dbb-bfd2-5e131f1c234b&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2ti68WoxTHjQrLtAxzdQGmqSX1J" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "FastAPI.AaEdu.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Merging crud-for-lesson-comments",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="AaEdu" type="Python.FastAPI">
+      <module name="AaEdu" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-PY-243.23654.177" />
+        <option value="bundled-python-sdk-91d3a02ef49d-43b77aa2d136-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.23654.177" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9d4fdc9b-c80a-4d78-9f96-9bacce1b538e" name="Changes" comment="" />
+      <created>1740822388973</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1740822388973</updated>
+      <workItem from="1740822390096" duration="571000" />
+      <workItem from="1740822976374" duration="610000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
 </project>
