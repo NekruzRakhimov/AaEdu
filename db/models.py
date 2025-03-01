@@ -18,6 +18,7 @@ class User(Base):
     username = Column(String, unique=True, nullable=False)  # Логин пользователя
     password = Column(String, unique=True, nullable=False)  # Пароль (должен быть хеширован)
     birth_date = Column(DateTime)  # Дата рождения
+    role_id = Column(Integer, ForeignKey("roles.id"), nullable=True)  # ID роли (Один пользователь - одна роль)
     created_at = Column(DateTime, default=datetime.datetime.now)  # Дата создания аккаунта
     updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
     deleted_at = Column(DateTime, nullable=True)  # Дата удаления (если пользователь был удален)
@@ -31,13 +32,6 @@ class Role(Base):
     created_at = Column(DateTime, default=datetime.datetime.now)  # Дата создания
     updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
     deleted_at = Column(DateTime, nullable=True)  # Дата удаления
-
-
-# Таблица связей между пользователями и ролями (многие ко многим)
-class UserRole(Base):
-    __tablename__ = "user_roles"
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)  # ID пользователя
-    role_id = Column(Integer, ForeignKey("roles.id"), primary_key=True)  # ID роли
 
 
 # Таблица курсов (каждый курс может содержать несколько уроков)
@@ -101,7 +95,7 @@ class Homework(Base):
     id = Column(Integer, primary_key=True)
     lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока
     student_id = Column(Integer, ForeignKey("users.id"))  # ID студента
-    score = Column(DECIMAL(5, 2))  # Оценка за задание
+    score = Column(DECIMAL(5, 2))  # Оценка за задание (0.00 - 100.00)
     submission_date = Column(DateTime, default=datetime.datetime.now)  # Дата сдачи домашнего задания
 
 
@@ -120,11 +114,12 @@ class StudentPerformance(Base):
     __tablename__ = "student_performances"
     id = Column(Integer, primary_key=True)
     student_id = Column(Integer, ForeignKey("users.id"))  # ID студента
-    avg_score = Column(DECIMAL(5, 2))  # Средний балл
-    attendance_rate = Column(DECIMAL(5, 2))  # Процент посещаемости
+    course_id = Column(Integer, ForeignKey("courses.id"))  # ID курса
+    avg_score = Column(DECIMAL(5, 2))  # Средний балл (0.00 - 100.00)
+    attendance_rate = Column(DECIMAL(5, 2))  # Процент посещаемости (0.00 - 100.00)
 
 
-# Лента событий (лог действий: обновления оценок, новые уроки и т. д.)
+# Лента событий (лог действий: обновления оценок, новые уроки и т. д.) - *** only admin ***
 class Event(Base):
     __tablename__ = "events"
     id = Column(Integer, primary_key=True)
@@ -133,6 +128,7 @@ class Event(Base):
     event_description = Column(Text)  # Описание события
     related_id = Column(Integer)  # ID связанного объекта (урока, курса, комментария и т. д.)
     created_at = Column(DateTime, default=datetime.datetime.now)  # Дата события
+    only_admin_editable = Column(Boolean, default=True)  # Только администратор может редактировать
 
 
 # Таблица расписания (расписание занятий для студентов и преподавателей)
