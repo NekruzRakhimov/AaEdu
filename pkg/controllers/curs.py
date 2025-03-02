@@ -17,7 +17,7 @@ def get_courses(db: Session = Depends(get_db)):
     return db.query(Course).filter(Course.deleted_at == None).all()
 
 
-@router.get("/{course_id}", response_model=CourseResponse, summary="Получить курс по ID")
+@router.get("/{id}", response_model=CourseResponse, summary="Получить курс по ID")
 def get_course(course_id: int, db: Session = Depends(get_db)):
     """Возвращает информацию о курсе по его ID."""
     course = db.query(Course).filter(Course.id == course_id, Course.deleted_at == None).first()
@@ -36,7 +36,7 @@ def create_course(course_data: CourseCreate, db: Session = Depends(get_db)):
     return new_course
 
 
-@router.put("/{course_id}", response_model=CourseResponse, summary="Обновить курс по ID")
+@router.put("/{id}", response_model=CourseResponse, summary="Обновить курс по ID")
 def update_course(course_id: int, course_data: CourseUpdate, db: Session = Depends(get_db)):
     """Обновляет данные курса по его ID."""
     course = db.query(Course).filter(Course.id == course_id, Course.deleted_at == None).first()
@@ -51,7 +51,7 @@ def update_course(course_id: int, course_data: CourseUpdate, db: Session = Depen
     return course
 
 
-@router.delete("/{course_id}", summary="Удалить курс по ID")
+@router.delete("/{id}", summary="Удалить курс по ID")
 def delete_course(course_id: int, db: Session = Depends(get_db)):
     """Помечает курс как удаленный, записывая время удаления."""
     course = db.query(Course).filter(Course.id == course_id, Course.deleted_at == None).first()
