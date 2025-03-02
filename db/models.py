@@ -61,7 +61,7 @@ class Lesson(Base):
     updated_at = Column(DateTime, nullable=True)
     deleted_at = Column(DateTime, nullable=True)
 
-'''class Homework(Base):
+class Homework(Base):
     __tablename__ = "homeworks"
     id = Column(Integer, primary_key=True)
     lesson_id = Column(Integer, ForeignKey("lessons.id"))
@@ -95,7 +95,7 @@ class Schedule(Base):
     lesson_id = Column(Integer, ForeignKey("lessons.id"))
     teacher_id = Column(Integer, ForeignKey("users.id"))
     scheduled_time = Column(DateTime, nullable=False)
-'''
+
 
 
 
