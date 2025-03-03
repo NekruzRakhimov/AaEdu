@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from configs.config import settings
 from db.models import migrate_tables
 from pkg.controllers.default import router as default_router
-from pkg.controllers.curs import router as courses_router
+from pkg.controllers.CourseController import router as courses_router
 
 # Создание FastAPI
 app = FastAPI()
