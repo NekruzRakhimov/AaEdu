@@ -6,7 +6,6 @@ from db.postgres import engine
 
 
 def get_student_courses(student_id: int) -> List[int]:
-    """Получает список ID курсов, в которых состоит студент."""
     with Session(bind=engine) as db:
         return [
             course.course_id for course in db.query(CourseUser.course_id)
@@ -16,7 +15,6 @@ def get_student_courses(student_id: int) -> List[int]:
 
 
 def is_mentor_in_courses(mentor_id: int, course_id: List[int]) -> bool:
-    """Проверяет, является ли пользователь ментором хотя бы в одном из курсов."""
     with Session(bind=engine) as db:
         return db.query(CourseUser).filter(
             CourseUser.user_id == mentor_id,
