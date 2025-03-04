@@ -47,7 +47,6 @@ class CourseUser(Base):
     __tablename__ = "course_users"
     course_id = Column(Integer, ForeignKey("courses.id"), primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
-    role_in_course = Column(String)
 
 
 class Lesson(Base):
