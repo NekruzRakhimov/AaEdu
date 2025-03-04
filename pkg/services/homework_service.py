@@ -1,53 +1,47 @@
-from pkg.repositories.homeworks import create_homework,get_homework_by_id,get_homeworks_by_student,update_homework,delete_homework
-
 from db.models import CourseUser, Homework
 from typing import List, Optional
-from pkg.controllers.middlewares import get_current_user
+from decimal import Decimal
+from pkg.repositories.homeworks import (
+    create_homework, get_homework_by_id, get_homeworks_by_student,
+    update_homework, delete_homework, get_student_courses, is_mentor_in_courses
+)
 from utils.auth import TokenPayload
 
 
-def add_homework(payload: TokenPayload, lesson_id: int, student_id: int, score: float) -> Optional[Homework]:
-    mentor_id = payload.id
+def is_mentor_of_student(mentor_id: int, student_id: int) -> bool:
+    student_courses = get_student_courses(student_id)
+    return is_mentor_in_courses(mentor_id, student_courses)
 
-    mentor = CourseUser.query.filter(
-        CourseUser.user_id == mentor_id,
-        CourseUser.role_in_course == 'mentor'
-    ).first()
 
-    if not mentor:
-        raise PermissionError("Только менторы могут выставлять оценки")
+
+def add_homework(payload: TokenPayload, lesson_id: int, student_id: int, score: Decimal) -> Optional[Homework]:
+    if not is_mentor_of_student(payload.id, student_id):
+        raise PermissionError("Только менторы курса могут выставлять оценки этому студенту")
 
     return create_homework(lesson_id, student_id, score)
 
 
 def get_student_homeworks(payload: TokenPayload) -> List[Homework]:
-    student_id = payload.id
-    return get_homeworks_by_student(student_id)
+    return get_homeworks_by_student(payload.id)
 
 
-def edit_homework(payload: TokenPayload, homework_id: int, score: float) -> Optional[Homework]:
-    mentor_id = payload.id
+def edit_homework(payload: TokenPayload, homework_id: int, score: Decimal) -> Optional[Homework]:
+    homework = get_homework_by_id(homework_id)
+    if not homework:
+        return None
 
-    mentor = CourseUser.query.filter(
-        CourseUser.user_id == mentor_id,
-        CourseUser.role_in_course == 'mentor'
-    ).first()
-
-    if not mentor:
-        raise PermissionError("Только менторы могут редактировать оценки")
+    if not is_mentor_of_student(payload.id, homework.student_id):
+        raise PermissionError("Только менторы курса могут редактировать эту оценку")
 
     return update_homework(homework_id, score)
 
 
 def remove_homework(payload: TokenPayload, homework_id: int) -> bool:
-    mentor_id = payload.id
+    homework = get_homework_by_id(homework_id)
+    if not homework:
+        return False
 
-    mentor = CourseUser.query.filter(
-        CourseUser.user_id == mentor_id,
-        CourseUser.role_in_course == 'mentor'
-    ).first()
-
-    if not mentor:
-        raise PermissionError("Только менторы могут удалять оценки")
+    if not is_mentor_of_student(payload.id, homework.student_id):
+        raise PermissionError("Только менторы курса могут удалять эту оценку")
 
     return delete_homework(homework_id)

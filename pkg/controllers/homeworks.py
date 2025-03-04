@@ -10,31 +10,35 @@ from pkg.controllers.middlewares import get_current_user
 
 router = APIRouter()
 
-@router.post("/", response_model=HomeworkResponse)
+
+@router.post("/", summary="create homework", tags=["homeworks"], response_model=HomeworkResponse)
 def create_homework(homework: HomeworkCreate, payload: TokenPayload = Depends(get_current_user)):
     try:
-        return add_homework(homework.mentor_id, homework.lesson_id, homework.student_id, homework.score)
+        return add_homework(payload, homework.lesson_id, homework.student_id, homework.score)
     except PermissionError as e:
         raise HTTPException(status_code=403, detail=str(e))
 
-@router.get("/{student_id}", response_model=List[HomeworkResponse])
-def get_homeworks(student_id: int, payload: TokenPayload = Depends(get_current_user)):
-    return get_student_homeworks(student_id)
 
-@router.put("/{homework_id}", response_model=HomeworkResponse)
-def update_homework(homework_id: int, score: float, mentor_id: int, payload: TokenPayload = Depends(get_current_user)):
+@router.get("/", summary="get homeworks", tags=["homeworks"], response_model=List[HomeworkResponse])
+def get_homeworks(payload: TokenPayload = Depends(get_current_user)):
+    return get_student_homeworks(payload)
+
+
+@router.put("/{homework_id}", summary="update homework", tags=["homeworks"], response_model=HomeworkResponse)
+def update_homework(homework_id: int, score: float, payload: TokenPayload = Depends(get_current_user)):
     try:
-        homework = edit_homework(mentor_id, homework_id, score)
+        homework = edit_homework(payload, homework_id, score)
         if not homework:
             raise HTTPException(status_code=404, detail="Homework not found")
         return homework
     except PermissionError as e:
         raise HTTPException(status_code=403, detail=str(e))
 
-@router.delete("/{homework_id}")
-def delete_homework(homework_id: int, mentor_id: int, payload: TokenPayload = Depends(get_current_user)):
+
+@router.delete("/{homework_id}", summary="delete homework", tags=["homeworks"], response_model=HomeworkResponse)
+def delete_homework(homework_id: int, payload: TokenPayload = Depends(get_current_user)):
     try:
-        success = remove_homework(mentor_id, homework_id)
+        success = remove_homework(payload, homework_id)
         if not success:
             raise HTTPException(status_code=404, detail="Homework not found")
         return {"message": "Homework deleted successfully"}
