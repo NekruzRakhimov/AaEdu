@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import List
 
+from decimal import Decimal
+
 from pkg.services.homework_service import (
     add_homework, get_student_homeworks, edit_homework, remove_homework
 )
@@ -25,7 +27,7 @@ def get_homeworks(payload: TokenPayload = Depends(get_current_user)):
 
 
 @router.put("/{homework_id}", summary="update homework", tags=["homeworks"], response_model=HomeworkResponse)
-def update_homework(homework_id: int, score: float, payload: TokenPayload = Depends(get_current_user)):
+def update_homework(homework_id: int, score: Decimal, payload: TokenPayload = Depends(get_current_user)):
     try:
         homework = edit_homework(payload, homework_id, score)
         if not homework:

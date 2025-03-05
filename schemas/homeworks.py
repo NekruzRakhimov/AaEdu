@@ -1,12 +1,11 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, condecimal
 from datetime import datetime
 
 
 class HomeworkBase(BaseModel):
     lesson_id: int
     student_id: int
-    score: float
+    score: condecimal(max_digits=5, decimal_places=2)
 
 
 class HomeworkCreate(HomeworkBase):
