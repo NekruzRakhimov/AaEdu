@@ -128,6 +128,8 @@ class Event(Base):
     event_description = Column(Text)  # Описание события
     related_id = Column(Integer)  # ID связанного объекта (урока, курса, комментария и т. д.)
     created_at = Column(DateTime, default=datetime.datetime.now)  # Дата события
+    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
+    deleted_at = Column(DateTime, nullable=True)  # Дата удаления
     only_admin_editable = Column(Boolean, default=True)  # Только администратор может редактировать
 
 
