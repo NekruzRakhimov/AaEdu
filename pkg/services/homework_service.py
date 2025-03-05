@@ -1,4 +1,4 @@
-from db.models import CourseUser, Homework
+from db.models import Homework
 from typing import List, Optional
 from decimal import Decimal
 from pkg.repositories.homeworks import (
@@ -13,12 +13,11 @@ def is_mentor_of_student(mentor_id: int, student_id: int) -> bool:
     return is_mentor_in_courses(mentor_id, student_courses)
 
 
-
 def add_homework(payload: TokenPayload, lesson_id: int, student_id: int, score: Decimal) -> Optional[Homework]:
     if not is_mentor_of_student(payload.id, student_id):
         raise PermissionError("Только менторы курса могут выставлять оценки этому студенту")
 
-    return create_homework(lesson_id, student_id, score)
+    return create_homework(lesson_id, student_id, score, mentor_id=payload.id)
 
 
 def get_student_homeworks(payload: TokenPayload) -> List[Homework]:

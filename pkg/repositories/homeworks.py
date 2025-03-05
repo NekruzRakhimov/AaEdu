@@ -14,17 +14,17 @@ def get_student_courses(student_id: int) -> List[int]:
         ]
 
 
-def is_mentor_in_courses(mentor_id: int, course_id: List[int]) -> bool:
+def is_mentor_in_courses(mentor_id: int, course_ids: List[int]) -> bool:
     with Session(bind=engine) as db:
         return db.query(CourseUser).filter(
             CourseUser.user_id == mentor_id,
             CourseUser.role_in_course == 'mentor',
-            CourseUser.course_id.in_(course_id)
+            CourseUser.course_id.in_(course_ids)
         ).first() is not None
 
 
 def create_homework(lesson_id: int, student_id: int, score: Decimal, mentor_id: int) -> Homework:
-    with Session() as db:
+    with Session(bind=engine) as db:
         homework = Homework(lesson_id=lesson_id, student_id=student_id, score=score, mentor_id=mentor_id)
         db.add(homework)
         db.commit()
