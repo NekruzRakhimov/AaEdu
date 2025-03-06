@@ -5,7 +5,7 @@ from configs.config import settings
 from db.models import migrate_tables
 
 from pkg.controllers.default import router as default_router
-from pkg.controllers.homeworks import router as homework_router  # оставляем homework_router
+from pkg.controllers.homeworks import router as homework_router
 from pkg.controllers.lesson import router as lesson_router
 from pkg.controllers.CourseController import router as courses_router
 from pkg.controllers.role import router as role_router
