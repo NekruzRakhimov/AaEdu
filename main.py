@@ -8,6 +8,7 @@ from pkg.controllers.default import router as default_router
 from pkg.controllers.lesson import router as lesson_router
 from pkg.controllers.CourseController import router as courses_router
 from pkg.controllers.role import router as role_router
+from pkg.controllers.event import router as event_router
 
 
 
@@ -23,6 +24,7 @@ if __name__ == "__main__":
     app.include_router(lesson_router)
     app.include_router(courses_router)
     app.include_router(role_router)
+    app.include_router(event_router)
 
 
     uvicorn.run(app, port=settings.port, host=settings.host)
