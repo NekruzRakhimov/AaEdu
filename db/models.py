@@ -64,8 +64,6 @@ class Lesson(Base):
     updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
     deleted_at = Column(DateTime, nullable=True)   # Дата удаления
 
-<<<<<<< HEAD
-=======
 
 # Таблица материалов для уроков
 class LessonMaterial(Base):
@@ -92,7 +90,6 @@ class Comment(Base):
 
 
 # Таблица домашних заданий (содержит оценки за выполненные задания)
->>>>>>> main
 class Homework(Base):
     __tablename__ = "homeworks"
     id = Column(Integer, primary_key=True)
@@ -140,19 +137,10 @@ class Event(Base):
 class Schedule(Base):
     __tablename__ = "schedules"
     id = Column(Integer, primary_key=True)
-<<<<<<< HEAD
-    course_id = Column(Integer, ForeignKey("courses.id"))
-    lesson_id = Column(Integer, ForeignKey("lessons.id"))
-    teacher_id = Column(Integer, ForeignKey("users.id"))
-    scheduled_time = Column(DateTime, nullable=False)
-
-
-=======
     course_id = Column(Integer, ForeignKey("courses.id"))  # ID курса
     lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока
     teacher_id = Column(Integer, ForeignKey("users.id"))  # ID преподавателя
     scheduled_time = Column(DateTime, nullable=False)  # Дата и время занятия
->>>>>>> main
 
 
 def migrate_tables():
