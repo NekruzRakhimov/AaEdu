@@ -1,4 +1,9 @@
 .idea
 .venv
 .vscode
+
 /logs
+
+venv/
+__pycache__/
+
