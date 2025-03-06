@@ -1,11 +1,17 @@
-def customized_greeting(name):
-    print(f"Hello, {name}")
+import uvicorn
+from fastapi import FastAPI
 
-def print_year_of_birth(age):
-    print(2025 - age)
+from configs.config import settings
+from db.models import migrate_tables
+from pkg.controllers.default import router as default_router
+from pkg.controllers.attendances import router as attendance_router
+if __name__ == "__main__":
+    # Создание таблиц
+    migrate_tables()
 
-name = input("What is your name? ")
-customized_greeting(name)
-
-age = int(input("What is your age? "))
-print_year_of_birth(age)
+    # Создание роутера
+    app = FastAPI()
+    # Подключаем маршруты
+    app.include_router(default_router)
+    app.include_router(attendance_router)
+    uvicorn.run(app, port=settings.port, host=settings.host)
