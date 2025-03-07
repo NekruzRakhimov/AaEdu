@@ -47,7 +47,6 @@ class CourseUser(Base):
     __tablename__ = "course_users"
     course_id = Column(Integer, ForeignKey("courses.id"), primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
-    role_in_course = Column(String)
 
 
 class Lesson(Base):
@@ -60,6 +59,7 @@ class Lesson(Base):
     created_at = Column(DateTime, default=datetime.datetime.now)
     updated_at = Column(DateTime, nullable=True)
     deleted_at = Column(DateTime, nullable=True)
+
 
 class Homework(Base):
     __tablename__ = "homeworks"
@@ -95,8 +95,6 @@ class Schedule(Base):
     lesson_id = Column(Integer, ForeignKey("lessons.id"))
     teacher_id = Column(Integer, ForeignKey("users.id"))
     scheduled_time = Column(DateTime, nullable=False)
-
-
 
 
 def migrate_tables():
