@@ -1,53 +1,38 @@
-from pkg.repositories.homeworks import (
-    create_homework, get_homework_by_id, get_homeworks_by_student,
-    update_homework, delete_homework, get_course_by_lesson, is_mentor_in_course
-)
 from fastapi import HTTPException
+from db.models import Homework, User
+from pkg.repositories import homeworks as homework_repository
+from schemas.homeworks import HomeworkSchema
 
 
-def is_mentor_of_course(mentor_id, lesson_id):
-    course_id = get_course_by_lesson(lesson_id)
-    if course_id is None:
-        raise HTTPException(status_code=404, detail="Course not found for this lesson.")
-    return is_mentor_in_course(mentor_id, course_id)
+def get_student_homeworks(user: User):
+    return homework_repository.get_homeworks_by_student(user.id)
 
 
-def add_homework(payload, lesson_id, student_id, score):
-    # Проверяем, является ли ментор ментором курса, к которому относится урок
-    if not is_mentor_of_course(payload.id, lesson_id):
-        raise PermissionError("Only mentors of the course can grade students.")
+def add_homework(user: User, lesson_id: int, student_id: int, score: float):
+    if not homework_repository.is_mentor_of_course(user.id, lesson_id):
+        raise HTTPException(status_code=403, detail="Only mentors of the course can grade students")
 
-    homework = create_homework(lesson_id, student_id, score, mentor_id=payload.id)
-    return {"id": homework.id}  # Возвращаем только ID
-
-
-def get_student_homeworks(payload):
-    return get_homeworks_by_student(payload.id)
+    homework = Homework(lesson_id=lesson_id, student_id=student_id, score=score, mentor_id=user.id)
+    return homework_repository.create_homework(homework)
 
 
-def edit_homework(payload, homework_id, score):
-    homework = get_homework_by_id(homework_id)
+def edit_homework(user: User, homework_id: int, score: float):
+    homework = homework_repository.get_homework_by_id(homework_id)
     if not homework:
-        raise HTTPException(status_code=404, detail="Homework not found.")
+        raise HTTPException(status_code=404, detail="Homework not found")
 
-    if not is_mentor_of_course(payload.id, homework.lesson_id):
-        raise PermissionError("Only mentors of the course can edit the homework grade.")
+    if not homework_repository.is_mentor_of_course(user.id, homework.lesson_id):
+        raise HTTPException(status_code=403, detail="Only mentors of the course can edit the homework grade")
 
-    updated_homework = update_homework(homework_id, score)
-    if not updated_homework:
-        raise HTTPException(status_code=500, detail="Failed to update homework.")
-    return updated_homework
+    return homework_repository.update_homework(homework_id, score)
 
 
-def remove_homework(payload, homework_id):
-    homework = get_homework_by_id(homework_id)
+def remove_homework(user: User, homework_id: int):
+    homework = homework_repository.get_homework_by_id(homework_id)
     if not homework:
-        raise HTTPException(status_code=404, detail="Homework not found.")
+        raise HTTPException(status_code=404, detail="Homework not found")
 
-    if not is_mentor_of_course(payload.id, homework.lesson_id):
-        raise PermissionError("Only mentors of the course can delete the homework.")
+    if not homework_repository.is_mentor_of_course(user.id, homework.lesson_id):
+        raise HTTPException(status_code=403, detail="Only mentors of the course can delete the homework")
 
-    success = delete_homework(homework_id)
-    if not success:
-        raise HTTPException(status_code=500, detail="Failed to delete homework.")
-    return {"message": "Homework successfully deleted."}
+    return homework_repository.delete_homework(homework_id)
