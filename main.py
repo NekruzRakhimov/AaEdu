@@ -13,16 +13,19 @@ from pkg.controllers.role import router as role_router
 from pkg.controllers.event import router as event_router
 
 app = FastAPI()
-
+if __name__ == "__main__":
+    # Создание таблиц
+    migrate_tables()
 # Создание таблиц
-migrate_tables()
 # Создание FastAPI
 
 # Подключаем маршруты
-app.include_router(default_router)
-app.include_router(homework_router)  # включаем homework_router
-app.include_router(lesson_router)
-app.include_router(courses_router)
-app.include_router(role_router)
-app.include_router(attendance_router)
-app.include_router(event_router)
+    app.include_router(default_router)
+    app.include_router(homework_router)  # включаем homework_router
+    app.include_router(lesson_router)
+    app.include_router(courses_router)
+    app.include_router(role_router)
+    app.include_router(attendance_router)
+    app.include_router(event_router)
+
+uvicorn.run(app, port=settings.port, host=settings.host)

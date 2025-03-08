@@ -30,7 +30,7 @@ def create_user(user: UserSchema):
     u.full_name = user.full_name
     u.username = user.username
     u.password = hash_password(user.password)
-    u.role = user.role
+    u.role = "user"
     u.created_at = datetime.datetime.now()
 
     return user_repository.create_user(u)

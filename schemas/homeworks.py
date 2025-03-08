@@ -5,7 +5,7 @@ from datetime import datetime
 class HomeworkBase(BaseModel):
     lesson_id: int
     student_id: int
-    score: condecimal(max_digits=5, decimal_places=2)
+    score: condecimal(max_digits=5, decimal_places=2) | None = None
 
 
 class HomeworkCreate(HomeworkBase):
@@ -14,4 +14,4 @@ class HomeworkCreate(HomeworkBase):
 
 class HomeworkResponse(HomeworkBase):
     id: int
-    submission_date: datetime
+    submission_date: None
