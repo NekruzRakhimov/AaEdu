@@ -39,17 +39,6 @@ def assign_role(user_id: int, role_id: int):
 
 @router.delete("/roles/{role_id}", summary="Soft delete a role", tags=["roles"])
 def soft_delete_role(role_id: int):
-    role = role_service.soft_delete_role(role_id)
-    if role is None:
-        return Response(json.dumps({'error': 'Role not found'}), status.HTTP_404_NOT_FOUND)
+    response, status_code = role_service.soft_delete_role(role_id)
 
-    return Response(json.dumps({'message': 'Role successfully soft deleted'}), status_code=status.HTTP_200_OK)
-
-
-@router.delete("/roles/{role_id}/hard", summary="Hard delete a role", tags=["roles"])
-def hard_delete_role(role_id: int):
-    role = role_service.hard_delete_role(role_id)
-    if role is None:
-        return Response(json.dumps({'error': 'Role not found'}), status.HTTP_404_NOT_FOUND)
-
-    return Response(json.dumps({'message': 'Role successfully hard deleted'}), status_code=status.HTTP_200_OK)
+    return Response(json.dumps(response), status_code=status_code, media_type='application/json')
