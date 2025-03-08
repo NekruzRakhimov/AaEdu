@@ -11,6 +11,8 @@ from pkg.controllers.CourseController import router as courses_router
 from pkg.controllers.attendances import router as attendance_router
 from pkg.controllers.role import router as role_router
 from pkg.controllers.event import router as event_router
+from pkg.controllers.lesson_material import router as material_router
+
 
 app = FastAPI()
 
@@ -26,3 +28,4 @@ app.include_router(courses_router)
 app.include_router(role_router)
 app.include_router(attendance_router)
 app.include_router(event_router)
+app.include_router(material_router)
