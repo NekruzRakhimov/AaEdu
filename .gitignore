@@ -1,8 +1,6 @@
 .idea
-.venv
-.vscode
-
+.vs
+*.pyc
 /logs
-
-venv/
 __pycache__/
+.venv
