@@ -15,8 +15,20 @@ def assign_role_to_user(user_id: int, role_id: int):
 
 
 def soft_delete_role(role_id: int):
-    return role_repository.soft_delete_role(role_id)
+    role = role_repository.get_role_by_id(role_id)
 
+    if not role:
+        return {"error": "Role not found"}, 404
 
-def hard_delete_role(role_id: int):
-    return role_repository.hard_delete_role(role_id)
+    if role.name == "Admin":
+        return {"error": "This role cannot be deleted"}, 403
+
+    result = role_repository.soft_delete_role(role_id)
+
+    if result is None:
+        return {"error": "Error deleting role"}, 500
+
+    if result == "Forbidden":
+        return {"error": "This role cannot be deleted"}, 403
+
+    return {"message": "Role successfully soft deleted", "role_id": result}, 200
