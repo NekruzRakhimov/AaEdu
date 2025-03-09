@@ -27,8 +27,8 @@ def get_homeworks(user: User = Depends(get_current_user)):
 
 @router.post("/homeworks", summary="Add homework", tags=["homeworks"])
 def add_homework(homework: HomeworkSchema, user: User = Depends(is_mentor)):
-    homework_id = homework_service.add_homework(user, homework.lesson_id, homework.student_id, homework.score)
-    return Response(json.dumps({'message': 'Homework successfully added', 'homework_id': homework_id}),
+    homework = homework_service.add_homework(user, homework.lesson_id, homework.student_id, homework.score)
+    return Response(json.dumps({'message': 'Homework successfully added', 'homework_id': homework.id}),
                     status_code=status.HTTP_201_CREATED,
                     media_type='application/json')
 
