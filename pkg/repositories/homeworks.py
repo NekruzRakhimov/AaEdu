@@ -21,11 +21,10 @@ def is_mentor_of_course(mentor_id: int, lesson_id: int):
         return False
 
     with Session(bind=engine) as db:
-        mentor_count = db.query(CourseUser).filter(
+        return db.query(CourseUser).filter(
             CourseUser.user_id == mentor_id,
             CourseUser.course_id == course_id
-        ).count()
-        return mentor_count > 0
+        ).first() is not None
 
 
 def create_homework(homework: Homework):
