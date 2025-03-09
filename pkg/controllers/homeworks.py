@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 def get_current_user():
-    user = User(id=2, full_name="Мария Петрова", username="maria", password="hashed_password2", role_id=3)
+    user = User(id=2, full_name="Мария Петрова", username="maria", password="hashed_password2", role_id=2)
     return user
 
 
@@ -22,8 +22,7 @@ def is_mentor(user: User = Depends(get_current_user)):
 
 @router.get("/homeworks", summary="Get student homeworks", tags=["homeworks"])
 def get_homeworks(user: User = Depends(get_current_user)):
-    homeworks = homework_service.get_student_homeworks(user)
-    return homeworks
+    return {"homeworks": homework_service.get_student_homeworks(user)}
 
 
 @router.post("/homeworks", summary="Add homework", tags=["homeworks"])

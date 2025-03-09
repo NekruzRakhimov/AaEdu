@@ -15,9 +15,9 @@ def get_course_by_lesson(lesson_id: int):
 
 
 def is_mentor_of_course(mentor_id: int, lesson_id: int):
+    """ Проверяет, является ли пользователь ментором курса, в котором находится данный урок. """
     course_id = get_course_by_lesson(lesson_id)
     if not course_id:
-        print(f"Course not found for lesson {lesson_id}.")  # Отладка
         return False
 
     with Session(bind=engine) as db:
@@ -25,8 +25,6 @@ def is_mentor_of_course(mentor_id: int, lesson_id: int):
             CourseUser.user_id == mentor_id,
             CourseUser.course_id == course_id
         ).count()
-        print(f"Mentor count for mentor {mentor_id} and course {course_id}: {mentor_count}")  # Отладка
-
         return mentor_count > 0
 
 

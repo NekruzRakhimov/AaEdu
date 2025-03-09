@@ -12,7 +12,7 @@ def add_homework(user: User, lesson_id: int, student_id: int, score: float):
     if not homework_repository.is_mentor_of_course(user.id, lesson_id):
         raise HTTPException(status_code=403, detail="Only mentors of the course can grade students")
 
-    homework = Homework(lesson_id=lesson_id, student_id=student_id, score=score, mentor_id=user.id)
+    homework = (Homework(lesson_id=lesson_id, student_id=student_id, score=score, mentor_id=user.id))
     return homework_repository.create_homework(homework)
 
 
