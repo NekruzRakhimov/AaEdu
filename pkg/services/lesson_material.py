@@ -35,7 +35,7 @@ def get_all_materials(lesson_id: int):
     return materials
 
 
-def get_material_by_hashed_filename(hashed_filename: str):
-    logger.info(f"uqerying for file {hashed_filename}")
-    lesson_material = material_repository.get_material_by_hashed_filename(hashed_filename)
+def get_material_by_id(file_id: int):
+    logger.info(f"uqerying for file {file_id}")
+    lesson_material = material_repository.get_material_by_id(file_id)
     return lesson_material

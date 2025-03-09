@@ -52,14 +52,15 @@ def get_all_materials(lesson_id):
         return db_materials
     
 
-def get_material_by_hashed_filename(hashed_filename):
+def get_material_by_id(file_id):
     with Session(bind=engine) as db:
         db_material = db.query(LessonMaterial).filter(
             LessonMaterial.deleted_at == None,
-            LessonMaterial.hashed_filename == hashed_filename
+            LessonMaterial.id == file_id
         ).first()
         if db_material is None:
-            logger.error(f"File {hashed_filename} not found")
+            logger.error(f"File {file_id} not found")
             return None
 
         return str(Path(MATERIAL_STORAGE, str(db_material.lesson_id), db_material.hashed_filename))
+    

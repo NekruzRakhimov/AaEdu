@@ -53,10 +53,10 @@ def get_all_materials(lesson_id: int):  #payload: TokenPayload=Depends(get_curre
         return {"message": e.args}
 
 
-@router.get("/lesson-materials/file/{hashed_filename}", summary="Get lesson material by hashed filename", tags=["lesson_materials"])
-def get_material_by_id(hashed_filename: str):
+@router.get("/lesson-materials/file/{file_id}", summary="Get lesson material by id", tags=["lesson_materials"])
+def get_material_by_id(file_id: int):
     try:
-        lesson_material = material_service.get_material_by_hashed_filename(hashed_filename) 
+        lesson_material = material_service.get_material_by_id(file_id) 
         return JSONResponse({"lesson_material path": lesson_material}, status_code=status.HTTP_200_OK)
     except Exception as e:
         return {"message": e.args}
