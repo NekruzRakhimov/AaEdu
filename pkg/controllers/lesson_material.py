@@ -28,21 +28,35 @@ router = APIRouter()
 
 
 # CREATE
-@router.post("/lesson-material/{lesson_id}", summary="Upload a file", tags=["lesson-material"])
-def upload_file(lesson_id: str, file: UploadFile = File(...)):
+@router.post("/lesson-materials/{lesson_id}", summary="Upload a file", tags=["lesson-materials"])
+def upload_file(lesson_id: int, file: UploadFile = File(...)):
     
     if file.size > MAX_ALLOWED_SIZE:
         return {"error": "File size should be less or equal to 5mb"}
     
     try:
         material_service.upload_file(lesson_id, file)
-        return {
+        return JSONResponse({
             "message": "file uploaded successfully",
-        }
+        }, status_code=status.HTTP_201_CREATED)
     except Exception as e:
         return {"message": e.args}
 
 
-# @router.get("/content", summary="Get all content", tags=["content"])
-# def get_all_content():  #payload: TokenPayload=Depends(get_current_user)):
-#     return JSONResponse({"message": str(CONTENT_STORAGE)}, status_code=status.HTTP_200_OK)
+# READ
+@router.get("/lesson-materials/{lesson_id}", summary="Get list of all lesson_materials", tags=["lesson_materials"])
+def get_all_materials(lesson_id: int):  #payload: TokenPayload=Depends(get_current_user)):
+    try:
+        materials = material_service.get_all_materials(lesson_id)
+        return materials
+    except Exception as e:
+        return {"message": e.args}
+
+
+@router.get("/lesson-materials/file/{hashed_filename}", summary="Get lesson material by hashed filename", tags=["lesson_materials"])
+def get_material_by_id(hashed_filename: str):
+    try:
+        lesson_material = material_service.get_material_by_hashed_filename(hashed_filename) 
+        return JSONResponse({"lesson_material path": lesson_material}, status_code=status.HTTP_200_OK)
+    except Exception as e:
+        return {"message": e.args}

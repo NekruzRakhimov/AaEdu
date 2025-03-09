@@ -76,8 +76,8 @@ class LessonMaterial(Base):
     filename = Column(String)  # имя файла
     hashed_filename = Column(String)  # хэшированное имя файла
     file_size_bytes = Column(Integer)  # размер файла
-    created_at = Column(DateTime, default=datetime.datetime.now())  # Двта создания
-    updated_at = Column(DateTime, onupdate=datetime.datetime.now())  # Дата обновления
+    created_at = Column(DateTime, default=datetime.datetime.now)  # Двта создания
+    updated_at = Column(DateTime, onupdate=datetime.datetime.now)  # Дата обновления
     deleted_at = Column(DateTime, nullable=True)  # Дата удаления
 
 
