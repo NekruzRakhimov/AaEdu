@@ -9,7 +9,7 @@ class CourseService:
         return CourseRepository.get_all(db)
 
     @staticmethod
-    def get_course(db: Session, course_id: int):
+    def get_course_id(db: Session, course_id: int):
         course = CourseRepository.get_by_id(db, course_id)
         if not course:
             raise HTTPException(status_code=404, detail="Course not found")

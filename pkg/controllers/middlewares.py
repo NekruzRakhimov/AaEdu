@@ -11,3 +11,4 @@ def get_current_user(authorization: str = Header(...)):
     token = authorization[len("Bearer "):]  # Аккуратно извлекаем сам токен
     payload = verify_token(token)  # Функция валидации токена
     return payload  # Возвращаем расшифрованные данные
+
