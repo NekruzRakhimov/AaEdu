@@ -34,7 +34,7 @@ def create_attendance(attendance: AttendanceSchema, response: Response):
     return JSONResponse({"message": "Task created"}, status_code=status.HTTP_201_CREATED)
 
 
-@router.put("/attendances/attendacne_id}", summary="update attendance by id", tags=["attendances"])
+@router.put("/attendances/{attendacne_id}", summary="update attendance by id", tags=["attendances"])
 def update_attendance(attendance: AttendanceSchema):
     user_id = 1
     attendances_service.update_attendance(user_id, attendance)
