@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, Depends
 from starlette.responses import Response, JSONResponse
 from pkg.controllers.middlewares import get_current_user
-from pkg.services import schedule as schedule_service
+from pkg.repository import schedule as schedule_repository
 from pkg.schemas.schedule import ScheduleCreate, ScheduleUpdate
 from utils.auth import TokenPayload
 
@@ -13,7 +13,7 @@ router = APIRouter()
 def get_all_schedules(course_id: int, payload: TokenPayload = Depends(get_current_user)):
     # TODO: check role
 
-    schedules = schedule_service.get_schedules(course_id)
+    schedules = schedule_repository.get_schedules(course_id)
     return schedules
 
 
@@ -22,7 +22,7 @@ def get_all_schedules(course_id: int, payload: TokenPayload = Depends(get_curren
 def get_schedule_by_id(course_id: int, schedule_id: int, payload: TokenPayload = Depends(get_current_user)):
     # TODO: check role
 
-    schedule = schedule_service.get_schedule_by_id(course_id, schedule_id)
+    schedule = schedule_repository.create_schedule(course_id, schedule)
     if schedule is None:
         return JSONResponse({"message": "Schedule not found"}, status_code=status.HTTP_404_NOT_FOUND)
     return schedule
@@ -33,7 +33,7 @@ def get_schedule_by_id(course_id: int, schedule_id: int, payload: TokenPayload =
 def create_schedule(course_id: int, schedule: ScheduleCreate, payload: TokenPayload = Depends(get_current_user)):
     # TODO: check role
 
-    schedule_service.create_schedule(course_id, schedule)
+    schedule_repository.create_schedule(course_id, schedule)
 
     return JSONResponse({"message": "Schedule created"}, status_code=status.HTTP_201_CREATED)
 
@@ -43,7 +43,7 @@ def create_schedule(course_id: int, schedule: ScheduleCreate, payload: TokenPayl
 def update_schedule(course_id: int, schedule_id: int, schedule: ScheduleUpdate, payload: TokenPayload = Depends(get_current_user)):
     # TODO: check role
 
-    updated_schedule = schedule_service.update_schedule(course_id, schedule_id, schedule)
+    updated_schedule = schedule_repository.update_schedule(course_id, schedule_id, schedule)
     if updated_schedule is None:
         return JSONResponse({"message": "Schedule not found"}, status_code=status.HTTP_404_NOT_FOUND)
 
@@ -55,7 +55,7 @@ def update_schedule(course_id: int, schedule_id: int, schedule: ScheduleUpdate, 
 def delete_schedule(course_id: int, schedule_id: int, payload: TokenPayload = Depends(get_current_user)):
     # TODO: check role
 
-    deleted_schedule = schedule_service.delete_schedule(course_id, schedule_id)
+    deleted_schedule = schedule_repository.delete_schedule(course_id, schedule_id)
     if deleted_schedule is None:
         return JSONResponse({"message": "Schedule not found"}, status_code=status.HTTP_404_NOT_FOUND)
 

@@ -6,6 +6,7 @@ from pkg.controllers.homeworks import router as homeworks_router
 from pkg.controllers.user import router as user_router
 from pkg.controllers.auth import router as auth_router
 from db.models import migrate_tables
+from pkg.controllers.schedule import router as schedule_router
 
 if __name__ == "__main__":
     # Создание таблиц
@@ -18,5 +19,6 @@ if __name__ == "__main__":
     app.include_router(auth_router)
     app.include_router(homeworks_router)
     app.include_router(user_router)
+    app.include_router(schedule_router)
 
     uvicorn.run(app, port=settings.port, host=settings.host)
