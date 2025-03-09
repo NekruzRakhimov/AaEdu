@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, relationship
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime, Text, DECIMAL
 
 from db.postgres import engine
@@ -96,6 +96,18 @@ class Schedule(Base):
     teacher_id = Column(Integer, ForeignKey("users.id"))
     scheduled_time = Column(DateTime, nullable=False)
 '''
+class Comment(Base):
+    __tablename__ = "comments"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    lesson_id = Column(Integer, ForeignKey("lessons.id"), nullable=False)
+    content = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.datetime.now)
+    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
+    is_deleted = Column(Boolean, default=False)
+
+    lesson = relationship("Lesson", back_populates="comments")
+    user = relationship("User")
 
 
 

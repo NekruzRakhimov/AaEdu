@@ -1,5 +1,5 @@
 {
-  "database_url": "postgresql://postgres:postgres@localhost:5432/python_db",
+  "database_url": "postgresql://postgres:239239ku@localhost:5432/python_db",
   "port": 8282,
   "host": "localhost",
   "auth": {
