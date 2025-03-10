@@ -1,10 +1,10 @@
-import json
+
 
 from fastapi import APIRouter, status, Depends
 
 from starlette.responses import Response, JSONResponse
 
-from db.models import Attendance
+
 from pkg.services import attendances as attendances_service
 from schemas.attendance import AttendanceSchema
 

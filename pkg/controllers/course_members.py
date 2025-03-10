@@ -15,7 +15,7 @@ def course_members(course_id: int):
 @router.post("/{course_id}", summary="Add member to course")
 def add_course_member(course_id: int, course_member: CourseMembers, payload: TokenPayload = Depends(get_current_user)):
     member_id = course_member.member_id
-    user_id = payload.user_id
+    user_id = payload.id
     result = course_members_service.add_course_member(course_id, member_id, user_id)
     if result:
         return {'message': 'You added member successfully'}
@@ -25,7 +25,7 @@ def add_course_member(course_id: int, course_member: CourseMembers, payload: Tok
 @router.delete("/{course_id}", summary="Delete member from course")
 def delete_course_member(course_id: int, course_member: CourseMembers, payload: TokenPayload = Depends(get_current_user)):
     member_id = course_member.member_id
-    user_id = payload.user_id
+    user_id = payload.id
     result = course_members_service.delete_course_member(course_id, member_id, user_id)
     if result:
         return {'message': 'Member deleted successfully'}

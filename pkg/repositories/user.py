@@ -30,3 +30,10 @@ def create_user(user: User):
         db.add(user)
         db.commit()
         return user.id
+
+
+def get_user_by_id(id):
+    with Session(bind=engine) as db:
+        db_user = db.query(User).filter(User.id == id).first()
+
+        return db_user
