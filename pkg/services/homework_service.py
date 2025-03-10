@@ -36,3 +36,9 @@ def remove_homework(user: User, homework_id: int):
         raise HTTPException(status_code=403, detail="Only mentors of the course can delete the homework")
 
     return homework_repository.delete_homework(homework_id)
+
+
+def soft_delete_homework(homework_id: int):
+    homework = homework_repository.get_homework_by_id(homework_id)
+    if not homework:
+        raise HTTPException(status_code=404, detail="Homework not found")

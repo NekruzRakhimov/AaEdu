@@ -65,3 +65,13 @@ def delete_homework(homework_id: int):
             db.commit()
             return True
         return False
+
+
+def soft_delete_homework(homework_id: int):
+    with Session(bind=engine) as db:
+        homework = db.query(Homework).filter(Homework.id == homework_id).first()
+        if homework:
+            homework.deleted_at = datetime.datetime.now()
+            db.commit()
+            return True
+        return False
