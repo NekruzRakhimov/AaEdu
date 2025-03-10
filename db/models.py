@@ -1,13 +1,17 @@
 import datetime
 
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime, Text, DECIMAL
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime, Text, DECIMAL, MetaData
+from sqlalchemy.schema import CreateSchema
 
 from db.postgres import engine
 
+schema_name = 'aa_edu'
+metadata = MetaData(schema=schema_name)
+
 
 class Base(DeclarativeBase):
-    pass
+    metadata = metadata
 
 
 # Таблица пользователей (студенты, родители, преподаватели, администраторы)
@@ -69,11 +73,12 @@ class LessonMaterial(Base):
     __tablename__ = "lesson_materials"
     id = Column(Integer, primary_key=True)
     lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока, к которому принадлежит материал
-    material_type = Column(String)  # file, link, text
-    content = Column(Text, nullable=False)  # Содержимое материала
+    filename = Column(String)  # имя файла
+    hashed_filename = Column(String)  # хэшированное имя файла
+    file_size_bytes = Column(Integer)  # размер файла
     created_at = Column(DateTime, default=datetime.datetime.now)  # Двта создания
-    # updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
-    # deleted_at = Column(DateTime, nullable=True)  # Дата удаления
+    updated_at = Column(DateTime, onupdate=datetime.datetime.now)  # Дата обновления
+    deleted_at = Column(DateTime, nullable=True)  # Дата удаления
 
 
 # Таблица комментариев к урокам
@@ -96,7 +101,7 @@ class Homework(Base):
     student_id = Column(Integer, ForeignKey("users.id"))  # ID студента
     score = Column(DECIMAL(5, 2))  # Оценка за задание (0.00 - 100.00)
     submission_date = Column(DateTime, default=datetime.datetime.now)  # Дата сдачи домашнего задания
-
+    mentor_id = Column(Integer, ForeignKey("users.id"))
 
 # Таблица посещаемости (фиксирует, кто посетил урок)
 class Attendance(Base):
@@ -142,8 +147,18 @@ class Schedule(Base):
     scheduled_time = Column(DateTime, nullable=False)  # Дата и время занятия
 
 
+def create_schema():
+    try:
+        with engine.connect() as connection:
+            connection.execute(CreateSchema(schema_name, if_not_exists=True))
+            connection.commit()
+    except Exception as e:
+        print(f"Ошибка во время создания схемы: {e}")
+
+
 def migrate_tables():
     try:
+        create_schema()
         Base.metadata.create_all(bind=engine)
     except Exception as e:
         print(f"Ошибка во время миграции: {e}")

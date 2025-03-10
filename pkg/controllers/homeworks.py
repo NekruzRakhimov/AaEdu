@@ -1,48 +1,49 @@
-from fastapi import APIRouter, HTTPException, Depends
-from typing import List
+from fastapi import APIRouter, HTTPException, status, Depends
+from starlette.responses import Response
+import json
 
-from decimal import Decimal
-
-from pkg.services.homework_service import (
-    add_homework, get_student_homeworks, edit_homework, remove_homework
-)
-from schemas.homeworks import HomeworkCreate, HomeworkResponse
-from utils.auth import TokenPayload
-from pkg.controllers.middlewares import get_current_user
+from pkg.services import homework_service as homework_service
+from schemas.homeworks import HomeworkSchema, HomeworkUpdateSchema
+from db.models import User
 
 router = APIRouter()
 
 
-@router.post("/", summary="create homework", tags=["homeworks"], response_model=HomeworkResponse)
-def create_homework(homework: HomeworkCreate, payload: TokenPayload = Depends(get_current_user)):
-    try:
-        return add_homework(payload, homework.lesson_id, homework.student_id, homework.score)
-    except PermissionError as e:
-        raise HTTPException(status_code=403, detail=str(e))
+def get_current_user():
+    user = User(id=2, full_name="Мария Петрова", username="maria", password="hashed_password2", role_id=2)
+    return user
 
 
-@router.get("/", summary="get homeworks", tags=["homeworks"], response_model=List[HomeworkResponse])
-def get_homeworks(payload: TokenPayload = Depends(get_current_user)):
-    return get_student_homeworks(payload)
+def is_mentor(user: User = Depends(get_current_user)):
+    if user.role_id != 2:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only mentors can perform this action")
+    return user
 
 
-@router.put("/{homework_id}", summary="update homework", tags=["homeworks"], response_model=HomeworkResponse)
-def update_homework(homework_id: int, score: Decimal, payload: TokenPayload = Depends(get_current_user)):
-    try:
-        homework = edit_homework(payload, homework_id, score)
-        if not homework:
-            raise HTTPException(status_code=404, detail="Homework not found")
-        return homework
-    except PermissionError as e:
-        raise HTTPException(status_code=403, detail=str(e))
+@router.get("/homeworks", summary="Get student homeworks", tags=["homeworks"])
+def get_homeworks(user: User = Depends(get_current_user)):
+    return {"homeworks": homework_service.get_student_homeworks(user)}
 
 
-@router.delete("/{homework_id}", summary="delete homework", tags=["homeworks"], response_model=HomeworkResponse)
-def delete_homework(homework_id: int, payload: TokenPayload = Depends(get_current_user)):
-    try:
-        success = remove_homework(payload, homework_id)
-        if not success:
-            raise HTTPException(status_code=404, detail="Homework not found")
-        return {"message": "Homework deleted successfully"}
-    except PermissionError as e:
-        raise HTTPException(status_code=403, detail=str(e))
+@router.post("/homeworks", summary="Add homework", tags=["homeworks"])
+def add_homework(homework: HomeworkSchema, user: User = Depends(is_mentor)):
+    homework_id = homework_service.add_homework(user, homework.lesson_id, homework.student_id, homework.score)
+    return Response(json.dumps({'message': 'Homework successfully added', 'homework_id': homework_id}),
+                    status_code=status.HTTP_201_CREATED,
+                    media_type='application/json')
+
+
+@router.put("/homeworks/{homework_id}", summary="Edit homework", tags=["homeworks"])
+def edit_homework(homework_id: int, homework_data: HomeworkUpdateSchema, user: User = Depends(is_mentor)):
+    updated_homework = homework_service.edit_homework(user, homework_id, homework_data.score)
+    if not updated_homework:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Homework not found")
+    return {"message": "Homework updated successfully", "homework": updated_homework}
+
+
+@router.delete("/homeworks/{homework_id}", summary="Delete homework", tags=["homeworks"])
+def remove_homework(homework_id: int, user: User = Depends(is_mentor)):
+    success = homework_service.remove_homework(user, homework_id)
+    if not success:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Homework not found")
+    return Response(json.dumps({'message': 'Homework successfully deleted'}), status_code=status.HTTP_200_OK)
