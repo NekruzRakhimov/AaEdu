@@ -13,7 +13,6 @@ router = APIRouter()
 
 @router.post('/sign-up')
 def sign_up(user: UserSchema):
-    print("Привет")
     user_from_db = user_service.get_user_by_username(user.username)
     if user_from_db is not None:
         return Response(json.dumps({'error': 'user with this username already exists'}), status.HTTP_400_BAD_REQUEST)

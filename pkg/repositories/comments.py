@@ -15,7 +15,7 @@ def get_comments(lesson_id: int):
 
     return db_comments
 
-def get_comment_by_id(lesson_id: int, comment_id: int):
+def get_comment_by_id(user_id: int, lesson_id: int, comment_id: int):
     with Session(bind=engine) as db:
         db_comment = db.query(Comment).filter(
             Comment.lesson_id == lesson_id,
@@ -35,12 +35,9 @@ def create_comment(comment: Comment):
 
         return comment.id
 
-def update_comment(lesson_id: int, comment_id: int, comment: CommentSchema):
+def update_comment(user_id: int, lesson_id: int, comment_id: int, comment: CommentSchema):
     with Session(bind=engine) as db:
-        db_comment = db.query(Comment).filter(
-            Comment.id == comment_id,
-            Comment.lesson_id == lesson_id,
-        ).first()
+        db_comment = get_comment_by_id(user_id, lesson_id, comment_id)
 
         if not db_comment:
             logger.error(f"Comment with id {comment_id} not found")
@@ -51,13 +48,9 @@ def update_comment(lesson_id: int, comment_id: int, comment: CommentSchema):
 
         return db_comment
 
-def delete_comment(lesson_id: int, comment_id: int):
+def delete_comment(user_id: int, lesson_id: int, comment_id: int):
     with Session(bind=engine) as db:
-        db_comment = db.query(Comment).filter(
-            Comment.id == comment_id,
-                     Comment.lesson_id == lesson_id,
-        ).first()
-
+        db_comment = get_comment_by_id(user_id, lesson_id, comment_id)
         if not db_comment:
             logger.error(f"Comment with id {comment_id} not found")
             return None

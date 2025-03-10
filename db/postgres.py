@@ -5,3 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from configs.config import settings
 
 engine = create_engine(settings.database_url)
+
+
+def get_db():
+    return None

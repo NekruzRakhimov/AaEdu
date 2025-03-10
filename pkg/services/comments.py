@@ -11,7 +11,7 @@ def create_comment(lesson_id: int, comment: CommentSchema):
 
     c = Comment()
     c.text = comment.text
-    c.author_id = comment.author_id
+    c.user_id = comment.user_id
     c.lesson_id = lesson_id
 
     return comment_repository.create_comment(c)
