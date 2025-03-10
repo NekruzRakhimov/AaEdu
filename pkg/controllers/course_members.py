@@ -1,32 +1,29 @@
-import json
+from fastapi import APIRouter, Depends
+from schemas.course_members import CourseMembers
+from pkg.services import course_members as course_members_service
 
-from fastapi import APIRouter, status, Depends
-
-from pkg.controllers.middlewares import get_current_user
-from pkg.services import course_members as course_members_services
-from utils.auth import TokenPayload
-
-router = APIRouter()
+router = APIRouter(prefix='/course_members', tags=['course_members'])
 
 
-@router.get("/course-members/{course_id}", summary="Get all course members", tags=["members"])
-def course_members(course_id: int, payload: TokenPayload = Depends(get_current_user)):
-    user_id = payload.user_id
-    members = course_members_services.course_members(course_id)
-    return members
+@router.get("/{course_id}", summary="Get all course members")
+def course_members(course_id: int):
+    members = course_members_service.course_members(course_id)
+    return {'members': members}
 
 
-@router.post("/course-members/{course_id}", summary="Add member to course", tags=["members"])
-def add_member_to_course(payload: TokenPayload = Depends(get_current_user)):
-    member_id = course_members_services.add_member_to_coursee()
+@router.post("/{course_id}", summary="Get all course members")
+def add_course_member(course_id: int, user_id: CourseMembers):
+    member_id = user_id.member_id
+    course_members_service.add_course_member(course_id, member_id)
     return {
-        "message": "member added successfully"
+        "message": "successfully added to course"
     }
 
 
-@router.delete("/course-members/{course_id}", summary="Delete member from course", tags=["members"])
-def del_from_course_member(payload: TokenPayload = Depends(get_current_user)):
-    member_id = course_members_services.delete_from_course()
+@router.delete("/{course_id}", summary="Delete member from course")
+def delete_course_member(course_id: int, user_id:CourseMembers):
+    member_id = user_id.member_id
+    course_members_service.delete_course_member(course_id, member_id)
     return {
-        "message": "member deleted successfully"
+        "message": "successfully deleted from course"
     }

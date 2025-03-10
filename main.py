@@ -9,9 +9,12 @@ from db.models import migrate_tables
 from pkg.controllers.default import router as default_router
 from pkg.controllers.lesson import router as lesson_router
 from pkg.controllers.CourseController import router as courses_router
+from pkg.controllers.user import router as user_router
+from pkg.controllers.auth import router as auth_router
 from pkg.controllers.attendances import router as attendance_router
 from pkg.controllers.role import router as role_router
 from pkg.controllers.event import router as event_router
+from pkg.controllers.course_members import router as course_members_router
 from pkg.controllers.lesson_material import router as material_router
 
 if __name__ == "__main__":
