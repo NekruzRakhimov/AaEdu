@@ -30,3 +30,32 @@ def get_attendance_by_id(user_id, attendance_id):
         attendance.attendance_date = db_attendances.attendance_date
         return attendance
 
+
+def create_attendance(attendance: Attendance):
+    with Session(bind=engine) as db:
+        attendance_db = Attendance(user_id=attendance.user_id,
+                                   lesson_id=attendance.lesson_id,
+                                   attended=attendance.attended,
+                                   attendance_date=attendance.attendance_date)
+        db.add(attendance_db)
+        db.commit()
+        return attendance_db.id
+
+
+def update_attendance(user_id, attendance):
+    with Session(bind=engine) as db:
+        attendance_db = db.query(Attendance).filter(Attendance.id == attendance.id,
+                                                    Attendance.user_id == user_id).first()
+        attendance_db.user_id = attendance.user_id
+        attendance_db.lesson_id = attendance.lesson_id
+        attendance_db.attended = attendance.attended
+        db.commit()
+
+
+def delete_attendance(user_id, attendance_id):
+    with Session(bind=engine) as db:
+        attendance_db = db.query(Attendance).filter(Attendance.id == attendance_id,
+                                                    Attendance.user_id == user_id).first()
+        db.delete(attendance_db)
+        db.commit()
+
