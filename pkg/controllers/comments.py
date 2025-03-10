@@ -1,71 +1,31 @@
-import datetime
-import json
-
-from fastapi import APIRouter, Depends, status
-from starlette.responses import Response
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
 from db.postgres import engine
-from pkg.controllers.middlewares import get_current_user
-from schemas.comments import CreateComment, CommentUpdate, CommentResponse
-
-
-from db.models import Comment, Lesson, User
+from pkg.services import comments as comment_service
+from schemas.comments import CommentSchema
 
 router = APIRouter()
 
-# Создание комментария
-@router.post("/comments/", summary="Create a new comment", tags=["Comments"])
-async def create_comment(comment: CreateComment, user: User = Depends(get_current_user)):
-    with Session(bind=engine) as db:
-        if not user:
-            return Response(json.dumps({'error': 'unauthorized'}), status.HTTP_401_UNAUTHORIZED)
-        lesson = db.query(Lesson).filter(Lesson.id == comment.lesson_id).first()
-        if not lesson:
-            return Response(json.dumps({'error': 'lesson not found'}), status.HTTP_404_NOT_FOUND)
 
-    new_comment = Comment(
-        lesson_id=comment.lesson_id,
-        user_id=user.id,
-        content=comment.content,
-        created_at=datetime.datetime.now()
-    )
-    db.add(new_comment)
-    db.commit()
-    db.refresh(new_comment)
-    return new_comment
+@router.get("/lessons/comments", summary= "Read comments", tags=["comments"])
+def get_comments(lesson_id):
+    comments = comment_service.get_comments(lesson_id)
+    return comments
 
-# Получение списка комментариев к уроку
-@router.get("/comments/{lesson_id}")
-async def get_comments(lesson_id: int):
-    pass
+@router.post("/lessons/{lesson_id}/comments", summary= "Create comment", tags=["comments"])
+def create_comment(lesson_id: int, comment: CommentSchema):
+    return comment_service.create_comment(lesson_id, comment)
 
+@router.put("/lessons/{lesson_id}/comments/{comment_id}", summary= "Update comment", tags=["comments"])
+def update_comment(lesson_id: int, comment_id: int, comment: CommentSchema):
+    updated_comment = comment_service.update_comment(lesson_id, comment_id, comment)
+    if not updated_comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+    return updated_comment
 
-# Редактирование комментария
-@router.put("/comments/{comment_id}")
-async def update_comment(comment_id: int, comment: CommentUpdate, user: User = Depends(get_current_user)):
-    with Session(bind=engine) as db:
-        if not user:
-            return Response(json.dumps({'error': 'unauthorized'}), status.HTTP_401_UNAUTHORIZED)
-        comment_to_update = db.query(Comment).filter(Comment.id == comment_id, Comment.user_id == user.id).first()
-        if not comment_to_update:
-            return Response(json.dumps({'error': 'comment not found'}), status.HTTP_404_NOT_FOUND)
-
-        comment_to_update.content = comment.content
-        comment_to_update.update_at = datetime.datetime.now()
-        db.commit()
-        db.refresh(comment_to_update)
-        return comment_to_update
-
-# Удаление комментария
-@router.delete("/comments/{comment_id}")
-async def delete_comment(comment_id: int, user: User = Depends(get_current_user)):
-    with Session(bind=engine) as db:
-        if not user:
-            return Response(json.dumps({'error': 'unauthorized'}), status.HTTP_401_UNAUTHORIZED)
-        comment_to_delete = db.query(Comment).filter(Comment.id == comment_id, Comment.user_id == user.id).first()
-        if not comment_to_delete:
-            return Response(json.dumps({'error': 'comment not found'}), status.HTTP_404_NOT_FOUND)
-        db.delete(comment_to_delete)
-        db.commit()
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/lessons/{lesson_id}/comments/{comment_id}", summary="Delete comments", tags=["comments"])
+def delete_comment(lesson_id: int, comment_id: int):
+    deleted_comment = comment_service.delete_comment(lesson_id, comment_id)
+    if not deleted_comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+    return deleted_comment

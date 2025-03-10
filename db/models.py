@@ -78,6 +78,7 @@ class LessonMaterial(Base):
 
 # Таблица комментариев к урокам
 class Comment(Base):
+    deleted_at = None
     __tablename__ = "comments"
     id = Column(Integer, primary_key=True)
     lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока, к которому принадлежит коммент
