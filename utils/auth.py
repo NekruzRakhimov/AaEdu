@@ -30,8 +30,7 @@ def create_access_token(data: dict, expires_delta: Optional[datetime.timedelta] 
     if "role_id" not in to_encode:
         raise ValueError("Missing role_id in token payload")
 
-    encoded_jwt = jwt.encode(
-        to_encode, settings.auth.secret_key, algorithm=settings.auth.algorithm)
+    encoded_jwt = jwt.encode(to_encode, settings.auth.secret_key, algorithm=settings.auth.algorithm)
     return encoded_jwt
 
 
