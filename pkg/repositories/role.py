@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from db.postgres import engine
 from db.models import Role, User
 
-critical_role = ["Admin"]
+critical_role = ["admin"]
 
 
 def create_role(role_name: str):

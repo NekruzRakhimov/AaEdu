@@ -10,11 +10,7 @@ from configs.config import settings
 # Модель данных для полезной нагрузки токена
 class TokenPayload(BaseModel):
     id: int
-<<<<<<< HEAD
-    role_id: str
-=======
     role_id: int
->>>>>>> c4df45187d9725d264d3635a977ace868e6b7cab
     exp: datetime.datetime
 
 

@@ -32,4 +32,5 @@ if __name__ == "__main__":
     app.include_router(attendance_router)
     app.include_router(event_router)
     app.include_router(material_router)
+    app.include_router(course_members_router)
     uvicorn.run(app, port=settings.port, host=settings.host)

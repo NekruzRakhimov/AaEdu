@@ -6,19 +6,16 @@ from sqlalchemy.schema import CreateSchema
 
 from db.postgres import engine
 
-schema_name = 'aa_edu'
-metadata = MetaData(schema=schema_name)
-
 
 class Base(DeclarativeBase):
-    metadata = metadata
+    pass
 
 
 # Таблица пользователей (студенты, родители, преподаватели, администраторы)
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
-    full_name = Column(String)   # Полное имя
+    full_name = Column(String)  # Полное имя
     username = Column(String, unique=True, nullable=False)  # Логин пользователя
     password = Column(String, unique=True, nullable=False)  # Пароль (должен быть хеширован)
     birth_date = Column(DateTime)  # Дата рождения
@@ -44,7 +41,7 @@ class Course(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)  # Название курса
     price = Column(Integer)  # Стоимость курса
-    created_at = Column(DateTime, default=datetime.datetime.now)   # Дата создания
+    created_at = Column(DateTime, default=datetime.datetime.now)  # Дата создания
     updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
     deleted_at = Column(DateTime, nullable=True)  # Дата удаления
 
@@ -60,12 +57,12 @@ class CourseUser(Base):
 class Lesson(Base):
     __tablename__ = "lessons"
     id = Column(Integer, primary_key=True)
-    course_id = Column(Integer, ForeignKey("courses.id"))   # ID курса, к которому принадлежит урок
+    course_id = Column(Integer, ForeignKey("courses.id"))  # ID курса, к которому принадлежит урок
     title = Column(String, nullable=False)  # Название урока
     description = Column(Text)  # Описание урока
-    created_at = Column(DateTime, default=datetime.datetime.now)   # Дата создания
+    created_at = Column(DateTime, default=datetime.datetime.now)  # Дата создания
     updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
-    deleted_at = Column(DateTime, nullable=True)   # Дата удаления
+    deleted_at = Column(DateTime, nullable=True)  # Дата удаления
 
 
 # Таблица материалов для уроков
@@ -102,6 +99,7 @@ class Homework(Base):
     score = Column(DECIMAL(5, 2))  # Оценка за задание (0.00 - 100.00)
     submission_date = Column(DateTime, default=datetime.datetime.now)  # Дата сдачи домашнего задания
     mentor_id = Column(Integer, ForeignKey("users.id"))
+
 
 # Таблица посещаемости (фиксирует, кто посетил урок)
 class Attendance(Base):
@@ -147,18 +145,8 @@ class Schedule(Base):
     scheduled_time = Column(DateTime, nullable=False)  # Дата и время занятия
 
 
-def create_schema():
-    try:
-        with engine.connect() as connection:
-            connection.execute(CreateSchema(schema_name, if_not_exists=True))
-            connection.commit()
-    except Exception as e:
-        print(f"Ошибка во время создания схемы: {e}")
-
-
 def migrate_tables():
     try:
-        create_schema()
         Base.metadata.create_all(bind=engine)
     except Exception as e:
         print(f"Ошибка во время миграции: {e}")
