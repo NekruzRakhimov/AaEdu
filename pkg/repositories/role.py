@@ -7,6 +7,7 @@ from db.models import Role, User
 
 critical_role = ["Admin"]
 
+
 def create_role(role_name: str):
     with Session(bind=engine) as db:
         role = Role(name=role_name)

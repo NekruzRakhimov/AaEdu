@@ -1,12 +1,19 @@
-def course_members(user_id, course_id):
-    
+from pkg.repositories import course_members as course_members_repositories
 
 
-def add_member_to_course(user_id, course_id):
-    pass
+def course_members(course_id: int):
+    return course_members_repositories.course_members(course_id)
 
 
-def delete_member_from_course(user_id, course_id):
-    pass
+def add_course_member(course_id: int, member_id: int, user_id: int):
+    user_role = course_members_repositories.get_user_role(user_id)
+    if user_role in ['admin', 'mentor'] or user_id == member_id:
+        return course_members_repositories.add_course_members(course_id, member_id)
+    return False
 
-def has_
+
+def delete_course_member(course_id: int, member_id: int, user_id: int):
+    user_role = course_members_repositories.get_user_role(user_id)
+    if user_role in ['admin', 'mentor'] or user_id == member_id:
+        return course_members_repositories.delete_course_member(course_id, member_id)
+    return False

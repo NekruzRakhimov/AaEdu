@@ -6,7 +6,3 @@ class EventSchema(BaseModel):
     event_type: str
     event_description: str
     related_id: int
-
-
-class EventUpdateSchema(BaseModel):
-    new_description: str
