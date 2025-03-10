@@ -75,3 +75,12 @@ def update_file(file_id: int, file: UploadFile = File(...)):
             }, status_code=status.HTTP_200_OK)
     except Exception as e:
         return {"message": e.args}
+    
+
+# DELETE
+@router.delete("/lesson-materials/file/{file_id}", summary="Delete lesson material by id", tags=["lesson_materials"])
+def delete_file(file_id):
+    if material_service.delete_file(file_id):
+        return JSONResponse({
+            "message": "successfully deleted the file"
+        }, status_code=status.HTTP_200_OK)

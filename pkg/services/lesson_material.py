@@ -66,3 +66,7 @@ def update_file(file_id, file):
     lm.hashed_filename = file.hashed_filename
     lm.file_size_bytes = file.size
     return material_repository.update_file(file_id, lm)
+
+
+def delete_file(file_id):
+    return material_repository.delete_file(file_id)

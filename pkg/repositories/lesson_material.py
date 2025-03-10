@@ -99,3 +99,18 @@ def update_file(file_id, lesson_material):
         db.commit()
 
         return db_material.id
+    
+
+def delete_file(file_id):
+    with Session(bind=engine) as db:
+        db_material = db.query(LessonMaterial).filter(
+                LessonMaterial.deleted_at == None,
+                LessonMaterial.id == file_id
+            ).first()
+        
+        if db_material is None:
+            return None
+        
+        db_material.deleted_at = datetime.datetime.now()
+        db.commit()
+        return db_material.id
