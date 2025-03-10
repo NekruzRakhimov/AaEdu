@@ -1,11 +1,7 @@
-2025-03-10 12:25:13,374 - ERROR - task_manager - update_lesson - Line 51 - Lesson with id 4 not found
-2025-03-10 12:25:20,068 - ERROR - task_manager - update_lesson - Line 51 - Lesson with id 1 not found
-2025-03-10 12:25:25,115 - ERROR - task_manager - update_lesson - Line 51 - Lesson with id 1 not found
-2025-03-10 12:25:47,224 - ERROR - task_manager - delete_lesson - Line 71 - Lesson with id 5 not found
-2025-03-10 12:26:25,241 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 1 not found
-2025-03-10 12:27:01,672 - ERROR - task_manager - delete_lesson - Line 71 - Lesson with id 5 not found
-2025-03-10 12:29:58,732 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 21 not found
-2025-03-10 12:39:25,611 - ERROR - task_manager - get_course_by_id - Line 89 - Course with id 11 not found
-2025-03-10 12:45:19,599 - ERROR - task_manager - update_lesson - Line 51 - Lesson with id 22 not found
-2025-03-10 12:45:30,117 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 21 not found
-2025-03-10 12:45:36,688 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 2 not found
+2025-03-10 08:40:56,542 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 2 not found
+2025-03-10 08:41:11,086 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 2 not found
+2025-03-10 08:41:28,745 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 1 not found
+2025-03-10 08:41:47,358 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 2 not found
+2025-03-10 08:41:51,514 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 3 not found
+2025-03-10 08:42:00,714 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 2 not found
+2025-03-10 08:48:38,226 - ERROR - task_manager - get_user_by_username_and_password - Line 22 - Invalid password: 654321

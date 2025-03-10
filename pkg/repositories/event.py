@@ -30,16 +30,21 @@ def get_event_by_id(event_id: int):
         return db.query(Event).filter(Event.id == event_id, Event.deleted_at == None).first()
 
 
-def update_event(event_id: int, new_description: str):
+def update_event(event_id: int, event: Event):
     with Session(bind=engine) as db:
-        event = db.query(Event).filter(Event.id == event_id, Event.deleted_at == None).first()
-        if not event:
+        db_event = db.query(Event).filter(Event.id == event_id, Event.deleted_at == None).first()
+        if not db_event:
             return None
 
-        event.event_description = new_description
-        event.updated_at = datetime.datetime.now()
+        db_event.user_id = event.user_id
+        db_event.event_type = event.event_type
+        db_event.event_description = event.event_description
+        db_event.related_id = event.related_id
+        db_event.updated_at = datetime.datetime.now()
+
         db.commit()
-        return event
+
+    return db_event
 
 
 def soft_delete_event(event_id: int):
