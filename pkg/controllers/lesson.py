@@ -1,5 +1,5 @@
 
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, HTTPException
 from starlette.responses import Response, JSONResponse
 from pkg.controllers.middlewares import get_current_user
 from pkg.services import lesson as lesson_service
@@ -13,7 +13,8 @@ router = APIRouter()
 # просмотр уроков, уровень доступа ментор, студент зависимость подписка на курс
 @router.get("/lessons/{course_id}", summary="Get all lessons", tags=["lessons"])
 def get_all_lessons(course_id: int, payload: TokenPayload = Depends(get_current_user)):
-    # TODO: check role
+    if payload.role_id not in [1, 2, 3]:
+        raise HTTPException(status_code=403, detail="Access denied")
 
     lessons = lesson_service.get_lessons(course_id)
     return lessons
@@ -22,7 +23,8 @@ def get_all_lessons(course_id: int, payload: TokenPayload = Depends(get_current_
 # просмотр урока, уровень доступа ментор, студент зависимость подписка на курс
 @router.get("/lesson/{course_id}/{lesson_id}", summary="Get lessons by ID", tags=["lessons"])
 def get_lesson_by_id(course_id: int, lesson_id: int, payload: TokenPayload = Depends(get_current_user)):
-    # TODO: check role
+    if payload.role_id not in [1, 2, 3]:
+        raise HTTPException(status_code=403, detail="Access denied")
 
     lesson = lesson_service.get_lesson_by_id(course_id, lesson_id)
     if lesson is None:
@@ -33,7 +35,8 @@ def get_lesson_by_id(course_id: int, lesson_id: int, payload: TokenPayload = Dep
 # добавление урока, уровень доступа ментор зависимость подписка на курс
 @router.post("/lesson/{course_id}", summary="Greate new lesson", tags=["lessons"])
 def create_lesson(course_id: int, lesson: LessonSchema, payload: TokenPayload = Depends(get_current_user)):
-    # TODO: check role
+    if payload.role_id not in [2, 3]:
+        raise HTTPException(status_code=403, detail="Access denied")
 
     lesson_service.create_lesson(course_id, lesson)
 
@@ -43,7 +46,8 @@ def create_lesson(course_id: int, lesson: LessonSchema, payload: TokenPayload = 
 # изменение урока, уровень доступа ментор зависимость подписка на курс
 @router.put("/lesson/{course_id}/{lesson_id}", summary="Get all tasks", tags=["lessons"])
 def update_lesson(course_id: int, lesson_id: int, lesson: LessonSchema, payload: TokenPayload = Depends(get_current_user)):
-    # TODO: check role
+    if payload.role_id not in [2, 3]:
+        raise HTTPException(status_code=403, detail="Access denied")
 
     lesson = lesson_service.update_lesson(course_id, lesson_id, lesson)
     if lesson is None:
@@ -55,7 +59,8 @@ def update_lesson(course_id: int, lesson_id: int, lesson: LessonSchema, payload:
 # удаление урока, уровень доступа ментор зависимость подписка на курс
 @router.delete("/lesson/{course_id}/{lesson_id}", summary="Get all tasks", tags=["lessons"])
 def delete_lesson(course_id: int, lesson_id: int, payload: TokenPayload = Depends(get_current_user)):
-    # TODO: check role
+    if payload.role_id not in [2, 3]:
+        raise HTTPException(status_code=403, detail="Access denied")
 
     lesson = lesson_service.delete_lesson(course_id, lesson_id)
     if lesson is None:

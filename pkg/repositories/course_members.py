@@ -1,3 +1,4 @@
+
 from db.models import CourseUser, User, Role
 from sqlalchemy.orm import Session
 
@@ -8,7 +9,6 @@ def course_members(course_id):
     with Session(bind=engine) as db:
         members = db.query(User).join(CourseUser).filter(CourseUser.course_id == course_id).all()
         members_list = []
-        print(type(members))
         for member in members:
             members_list.append(member.full_name)
         return members_list

@@ -12,7 +12,6 @@ def course_members(course_id: int):
     members = course_members_service.course_members(course_id)
     return {'members': members}
 
-
 @router.post("/{course_id}", summary="Add member to course")
 def add_course_member(course_id: int, course_member: CourseMembers, payload: TokenPayload = Depends(get_current_user)):
     member_id = course_member.member_id
@@ -31,3 +30,5 @@ def delete_course_member(course_id: int, course_member: CourseMembers, payload: 
     if result:
         return {'message': 'Member deleted successfully'}
     return {'message': 'Only admin or mentor can delete another user'}
+
+

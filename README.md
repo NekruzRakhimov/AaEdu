@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #### LMS (CRM) - aa.edu
 Описание: Платформа для управления образовательным учреждением
 
@@ -7,14 +6,45 @@
 id - int (unique)
 username - string
 fullname - string
-email - string (unique)
 birth_date - time
-created_at - time
-updated_at - time
-deleted_at - time
 
-Курс - courses
+Курс - Сourses
 id - int(unique)
+price - int
+name - str
+
+Урока - Lessons
+id - int(unique)
+title - str
+description -str
+course_id -int(foreign key)
+
+Материалы для урока - LessonMaterial
+id - int(unique)
+meterial_tipe - str
+content - str 
+lesson_id -int(foreign key)
+
+Комментарии - Comment
+id - int(unique)
+content - str 
+lesson_id - int(foreign key)
+user_id - int(foreign key)
+
+Домашняя работа - HomeWork
+id - int(unique)
+score - decimal
+submission_date = time 
+lesson_id - int(foreing key)
+student_id - int(foreing key)
+
+Посещаемость - Attendance 
+id - int(unique)
+attended - bool
+attendance_date - time 
+lesson_id - int(foreing key)
+student_id - int(foreing key)
+
 
 users_courses
 user_id - int
@@ -25,7 +55,7 @@ users_courses.user_id -> users.id & users_courses.course_id -> courses.id
 
 #### Основной функционал
 1. Регистрация / Вход
-2. Две роли: ментор, ученик, админ
+2. Роли: ментор, ученик, админ
 3. CRUD для курсов
 4. CRUD для уроков
 5. CRUD для расписания

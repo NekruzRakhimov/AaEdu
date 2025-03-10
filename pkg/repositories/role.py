@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from db.postgres import engine
 from db.models import Role, User
 
+critical_role = ["Admin"]
+
 
 def create_role(role_name: str):
     with Session(bind=engine) as db:
@@ -18,6 +20,11 @@ def create_role(role_name: str):
 def get_all_roles():
     with Session(bind=engine) as db:
         return db.query(Role).filter(Role.deleted_at == None).all()
+
+
+def get_role_by_id(role_id: int):
+    with Session(bind=engine) as db:
+        return db.query(Role).filter(Role.id == role_id).first()
 
 
 def assign_role_to_user(user_id: int, role_id: int):
@@ -38,17 +45,10 @@ def soft_delete_role(role_id: int):
         if not role:
             return None
 
+        if role.name in critical_role:
+            return "Forbidden"
+
         role.deleted_at = datetime.datetime.now()
         db.commit()
-        return role
-
-
-def hard_delete_role(role_id: int):
-    with Session(bind=engine) as db:
-        role = db.query(Role).filter(Role.id == role_id).first()
-        if not role:
-            return None
-
-        db.delete(role)
-        db.commit()
-        return role
+        db.refresh(role)
+        return role.id
