@@ -7,13 +7,6 @@ from pkg.repositories import lesson_material as material_repository
 from logger.logger import logger
 
 
-import logging
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
-
-
 def save_file(lesson_id, file):
     hashed_filename = hash_filename(file.filename)
     file.hashed_filename = hashed_filename
@@ -32,20 +25,17 @@ def upload_file(lesson_id, file):
 
 
 def get_all_materials(lesson_id: int):
-    logger.info("service entrypoint")
     materials = material_repository.get_all_materials(lesson_id)
     return materials
 
 
 def get_material_by_id(file_id: int):
-    logger.info(f"querying for file {file_id}")
     lesson_material = material_repository.get_material_by_id(file_id)
     return lesson_material
 
 
 def replace_file(file_id, file):
     file_path = material_repository.get_material_by_id(file_id)
-    logger.info(f"file_path: {file_path}")
     if file_path is None:
         return None
     
@@ -56,7 +46,6 @@ def replace_file(file_id, file):
 
 def update_file(file_id, file):
     new_file_path = replace_file(file_id, file)
-    logger.info(f"New file path: {new_file_path}")
     if new_file_path is None:    
         return None
     

@@ -1,21 +1,11 @@
 import json
 
-from fastapi import APIRouter, status, Depends, HTTPException, File, UploadFile
+from fastapi import APIRouter, status, Depends, File, UploadFile
 from starlette.responses import Response, JSONResponse
-from pathlib import Path
-import shutil
 
 from pkg.controllers.middlewares import get_current_user
-from logger.logger import logger
 from utils.auth import TokenPayload
 from pkg.services import lesson_material as material_service
-
-
-import logging
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
 
 
 BYTES_TO_MB = 1048576

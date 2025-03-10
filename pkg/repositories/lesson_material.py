@@ -1,6 +1,3 @@
-from utils.hash import hash_filename
-from fastapi import APIRouter, status, Depends, HTTPException, File, UploadFile
-
 from sqlalchemy.orm import Session
 from pathlib import Path
 import shutil
@@ -12,11 +9,6 @@ from db.models import LessonMaterial
 
 from logger.logger import logger
 
-import logging
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
 
 MATERIAL_STORAGE = Path(Path.cwd(), 'lesson_materials')
 
@@ -49,8 +41,6 @@ def get_all_materials(lesson_id):
             LessonMaterial.deleted_at == None,
             LessonMaterial.lesson_id == lesson_id
         ).all()
-        logger.info("fetched db_materials")
-        print(db_materials)
         return db_materials
     
 
@@ -68,8 +58,6 @@ def get_material_by_id(file_id):
     
 
 def replace_file(file_path, file):
-    logger.info(f"file path type: {type(file_path)}")
-    logger.info(f"file_path: {file_path}")
     try:
         file_path.unlink()  # удаляем старый файл
 
