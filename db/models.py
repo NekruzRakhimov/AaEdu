@@ -101,7 +101,7 @@ class Homework(Base):
     student_id = Column(Integer, ForeignKey("users.id"))  # ID студента
     score = Column(DECIMAL(5, 2))  # Оценка за задание (0.00 - 100.00)
     submission_date = Column(DateTime, default=datetime.datetime.now)  # Дата сдачи домашнего задания
-
+    mentor_id = Column(Integer, ForeignKey("users.id"))
 
 # Таблица посещаемости (фиксирует, кто посетил урок)
 class Attendance(Base):

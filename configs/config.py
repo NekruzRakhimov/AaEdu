@@ -23,3 +23,4 @@ def load_config(path: str = "configs/config.json") -> Settings:
 
 
 settings = load_config()
+
