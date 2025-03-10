@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from pathlib import Path
 import shutil
 
+import datetime
+
 from db.postgres import engine
 from db.models import LessonMaterial
 
@@ -64,3 +66,36 @@ def get_material_by_id(file_id):
 
         return str(Path(MATERIAL_STORAGE, str(db_material.lesson_id), db_material.hashed_filename))
     
+
+def replace_file(file_path, file):
+    logger.info(f"file path type: {type(file_path)}")
+    logger.info(f"file_path: {file_path}")
+    try:
+        file_path.unlink()  # удаляем старый файл
+
+        new_file_path = Path(file_path.parent, file.hashed_filename)
+        with open(new_file_path, 'wb') as f:
+            shutil.copyfileobj(file.file, f)
+        return new_file_path
+    
+    except Exception as e:
+        return {"message": e.args}
+    
+
+def update_file(file_id, lesson_material):
+    with Session(bind=engine) as db:
+        db_material = db.query(LessonMaterial).filter(
+                LessonMaterial.deleted_at == None,
+                LessonMaterial.id == file_id
+            ).first()
+        
+        if db_material is None:
+            return None
+        
+        db_material.filename = lesson_material.filename
+        db_material.hashed_filename = lesson_material.hashed_filename
+        db_material.file_size_bytes = lesson_material.file_size_bytes
+        db_material.updated_at = datetime.datetime.now()
+        db.commit()
+
+        return db_material.id

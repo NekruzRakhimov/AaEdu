@@ -60,3 +60,18 @@ def get_material_by_id(file_id: int):
         return JSONResponse({"lesson_material path": lesson_material}, status_code=status.HTTP_200_OK)
     except Exception as e:
         return {"message": e.args}
+    
+# UPDATE
+@router.put("/lesson-materials/file/{file_id}", summary="Update lesson material by id", tags=["lesson_materials"])
+def update_file(file_id: int, file: UploadFile = File(...)):
+    if file.size > MAX_ALLOWED_SIZE:
+        return {"error": "File size should be less or equal to 5mb"}
+    
+    try:
+        new_file_path = material_service.update_file(file_id, file)
+        if new_file_path:
+            return JSONResponse({
+                "message": "file updated successfully",
+            }, status_code=status.HTTP_200_OK)
+    except Exception as e:
+        return {"message": e.args}
