@@ -121,11 +121,10 @@ class Homework(Base):
     lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока
     student_id = Column(Integer, ForeignKey("users.id"))  # ID студента
     score = Column(DECIMAL(5, 2))  # Оценка за задание (0.00 - 100.00)
-    # Дата сдачи домашнего задания
     submission_date = Column(DateTime, default=datetime.datetime.now)
     mentor_id = Column(Integer, ForeignKey("users.id"))
+    ddeleted_at = Column(DateTime, nullable=True, default=None)
 
-# Таблица посещаемости (фиксирует, кто посетил урок)
 
 
 class Attendance(Base):
