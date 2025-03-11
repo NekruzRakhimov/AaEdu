@@ -2,7 +2,7 @@ import datetime
 
 from sqlalchemy.orm import Session
 from db.postgres import engine
-from db.models import Lesson
+from db.models import Lesson, Course, CourseUser
 from schemas.lesson import LessonSchema
 from logger.logger import logger
 
@@ -76,3 +76,23 @@ def delete_lesson(course_id: int, lesson_id: int):
         db.commit()
 
         return db_lesson
+
+
+def is_course_exists(course_id: int):
+    with Session(bind=engine) as db:
+        count = db.query(Course).filter(
+            Course.id == course_id,
+            Course.deleted_at == None
+        ).count()
+
+    return count > 0
+
+
+def is_user_has_access_to_lesson(user_id: int, course_id: int):
+    with Session(bind=engine) as db:
+        count = db.query(CourseUser).filter(
+            CourseUser.user_id == user_id,
+            CourseUser.course_id == course_id
+        ).count()
+
+        return count > 0

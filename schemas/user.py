@@ -6,6 +6,7 @@ class UserSchema(BaseModel):
     username: str
     password: str
     birth_date: str
+    role: str
 
 
 class UserSignInSchema(BaseModel):

@@ -1,4 +1,6 @@
 .idea
-.venv
-.vscode
+.vs
 *.pyc
+/logs
+*__pycache__/
+.venv
