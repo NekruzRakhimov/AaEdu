@@ -35,7 +35,7 @@ def get_material_by_id(file_id: int):
 
 
 def replace_file(file_id, file):
-    file_path = material_repository.get_material_by_id(file_id)
+    file_path, _ = material_repository.get_material_by_id(file_id)
     if file_path is None:
         return None
     

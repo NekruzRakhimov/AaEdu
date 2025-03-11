@@ -53,8 +53,10 @@ def get_material_by_id(file_id):
         if db_material is None:
             logger.error(f"File {file_id} not found")
             return None
+        
+        file_path = str(Path(MATERIAL_STORAGE, str(db_material.lesson_id), db_material.hashed_filename))
 
-        return str(Path(MATERIAL_STORAGE, str(db_material.lesson_id), db_material.hashed_filename))
+        return (file_path, db_material.filename)
     
 
 def replace_file(file_path, file):
