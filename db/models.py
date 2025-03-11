@@ -73,9 +73,10 @@ class Homework(Base):
 class Attendance(Base):
     __tablename__ = "attendances"
     id = Column(Integer, primary_key=True)
-    lesson_id = Column(Integer, ForeignKey("lessons.id"))
-    user_id = Column(Integer, ForeignKey("users.id"))
-    attended = Column(Boolean)
+    lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока
+    user_id = Column(Integer, ForeignKey("users.id"))  # ID студента
+    course_id = Column(Integer, ForeignKey("courses.id"))  # ID курса
+    attended = Column(Boolean)  # Был ли студент на занятии (True = Да, False = Нет)
     attendance_date = Column(DateTime, default=datetime.datetime.now)
 
 

@@ -11,6 +11,7 @@ def get_all_attendances():
             a = Attendance()
             a.user_id = attendance.user_id
             a.lesson_id = attendance.lesson_id
+            a.course_id = attendance.course_id
             a.attended = attendance.attended
             a.attendance_date = attendance.attendance_date
             attendances.append(a)
@@ -26,6 +27,7 @@ def get_attendance_by_id(user_id, attendance_id):
         attendance = Attendance()
         attendance.user_id = db_attendances.user_id
         attendance.lesson_id = db_attendances.lesson_id
+        attendance.course_id = db_attendances.course_id
         attendance.attended = db_attendances.attended
         attendance.attendance_date = db_attendances.attendance_date
         return attendance
@@ -35,6 +37,7 @@ def create_attendance(attendance: Attendance):
     with Session(bind=engine) as db:
         attendance_db = Attendance(user_id=attendance.user_id,
                                    lesson_id=attendance.lesson_id,
+                                   course_id=attendance.course_id,
                                    attended=attendance.attended,
                                    attendance_date=attendance.attendance_date)
         db.add(attendance_db)
@@ -48,6 +51,7 @@ def update_attendance(user_id, attendance):
                                                     Attendance.user_id == user_id).first()
         attendance_db.user_id = attendance.user_id
         attendance_db.lesson_id = attendance.lesson_id
+        attendance_db.course_id = attendance.course_id
         attendance_db.attended = attendance.attended
         db.commit()
 
