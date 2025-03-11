@@ -20,10 +20,6 @@ def create_attendance(user_id, attendance: AttendanceSchema):
     a.user_id = attendance.user_id
     a.lesson_id = attendance.lesson_id
     a.course_id = attendance.course_id
-    a.attended = attendance.attended
-    a.attendance_date = attendance.attendance_date
-
-    return attendances_repository.create_attendance(a)
 
 
 def update_attendance(user_id, attendance: AttendanceSchema):

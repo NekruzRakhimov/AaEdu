@@ -11,6 +11,7 @@ from configs.config import settings
 class TokenPayload(BaseModel):
     id: int
     role: int
+    role_id: int
     exp: datetime.datetime
 
 
@@ -26,14 +27,25 @@ def create_access_token(data: dict, expires_delta: Optional[datetime.timedelta] 
             minutes=settings.auth.access_token_expire_minutes)
 
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.auth.secret_key, algorithm=settings.auth.algorithm)
+
+    if "role_id" not in to_encode:
+        raise ValueError("Missing role_id in token payload")
+
+    encoded_jwt = jwt.encode(
+        to_encode, settings.auth.secret_key, algorithm=settings.auth.algorithm)
     return encoded_jwt
 
 
 # Функция для верификации JWT токена
 def verify_token(token: str):
     try:
-        payload = jwt.decode(token, settings.auth.secret_key, algorithms=[settings.auth.algorithm])
+        payload = jwt.decode(token, settings.auth.secret_key,
+                             algorithms=[settings.auth.algorithm])
+
+        if "role_id" not in payload or payload["role_id"] is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail="Invalid token: Missing role_id")
+
         return TokenPayload(**payload)
     except jwt.PyJWTError:
         raise HTTPException(

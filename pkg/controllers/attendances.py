@@ -6,6 +6,7 @@ from starlette.responses import Response, JSONResponse
 
 from pkg.controllers.middlewares import get_current_user
 from utils.auth import TokenPayload
+from db.models import Attendance
 from pkg.services import attendances as attendances_service
 from schemas.attendance import AttendanceSchema
 
@@ -37,14 +38,14 @@ def create_attendance(attendance: AttendanceSchema, payload: TokenPayload = Depe
 
 
 @router.put("/attendances/{attendacne_id}", summary="update attendance by id", tags=["attendances"])
-def update_attendance(attendance: AttendanceSchema,  payload: TokenPayload = Depends(get_current_user)):
+def update_attendance(attendance: AttendanceSchema, payload: TokenPayload = Depends(get_current_user)):
     user_id = payload.id
     attendances_service.update_attendance(user_id, attendance)
     return JSONResponse({"message": "attendance updated"}, status_code=status.HTTP_200_OK)
 
 
 @router.delete("/attendances/{attendacne_id}}", summary="delete attendance by id", tags=["attendances"])
-def delete_attendance_by_id(attendance_id: int,  payload: TokenPayload = Depends(get_current_user)):
+def delete_attendance_by_id(attendance_id: int, payload: TokenPayload = Depends(get_current_user)):
     user_id = payload.id
     attendances_service.delete_attendance(user_id, attendance_id)
     return JSONResponse({"message": "attendance deleted"})
