@@ -125,7 +125,7 @@ class Homework(Base):
     submission_date = Column(DateTime, default=datetime.datetime.now)
     mentor_id = Column(Integer, ForeignKey("users.id"))
     deleted_at = Column(DateTime, nullable=True, default=None)
-
+    homework = Column(String, nullable=True)
 
 
 class Attendance(Base):
