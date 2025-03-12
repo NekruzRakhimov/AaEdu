@@ -1,8 +1,9 @@
 import json
 
-from fastapi import APIRouter, status, Depends, File, UploadFile
+from fastapi import APIRouter, status, Depends, File, UploadFile, HTTPException
 from fastapi.responses import FileResponse
 from starlette.responses import Response, JSONResponse
+from pathlib import Path
 
 from pkg.controllers.middlewares import get_current_user
 from utils.auth import TokenPayload
@@ -28,12 +29,12 @@ def upload_file(lesson_id: int, file: UploadFile = File(...), payload: TokenPayl
     role_id = payload.role_id
     logger.info(f"role_id: {role_id}")
     if role_id == 1:
-        return Response(json.dumps({"error": "only admins and mentors can add lesson materials"}),
+        return JSONResponse({"error": "only admins and mentors can add lesson materials"},
                         status_code=status.HTTP_403_FORBIDDEN)
     
     logger.info(f"file size: {file.size}")
     if file.size > MAX_ALLOWED_SIZE:
-        return {"error": "File size should be less or equal to 5mb"}
+        return JSONResponse({"error": "File size should be less or equal to 5mb"})
     
     try:
         material_service.upload_file(lesson_id, file)
@@ -41,7 +42,7 @@ def upload_file(lesson_id: int, file: UploadFile = File(...), payload: TokenPayl
             "message": "file uploaded successfully",
         }, status_code=status.HTTP_201_CREATED)
     except Exception as e:
-        return {"message": e.args}
+        return JSONResponse({"message": e.args})
 
 
 # READ
@@ -51,13 +52,27 @@ def get_all_materials(lesson_id: int, payload: TokenPayload=Depends(get_current_
         materials = material_service.get_all_materials(lesson_id)
         return materials
     except Exception as e:
-        return {"message": e.args}
+        return JSONResponse({"message": e.args})
 
 
 @router.get("/lesson-materials/file/{file_id}", summary="Get lesson material by id", tags=["lesson_materials"])
 def get_material_by_id(file_id: int, payload: TokenPayload=Depends(get_current_user)):
     try:
-        file_path, filename = material_service.get_material_by_id(file_id) 
+        file_to_download = material_service.get_material_by_id(file_id)
+        logger.info(f"controller layer->get_material_by_id->file_to_download = {file_to_download}")
+        if file_to_download is None:
+            return JSONResponse(
+                {"error": "The requested file not found"},
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+        
+        file_path, filename = file_to_download
+        logger.info(f"controller layer->get_material_by_id->file_exists={Path(file_path).exists()}")
+        if not Path(file_path).exists():
+            return JSONResponse(
+                {"error": "The requested file does not exist on the server"},
+                status_code=status.HTTP_410_GONE
+            )
         return FileResponse(file_path, filename=filename)
     except Exception as e:
         return {"message": e.args}
@@ -72,10 +87,15 @@ def update_file(file_id: int, file: UploadFile = File(...), payload: TokenPayloa
                         status_code=status.HTTP_403_FORBIDDEN)
     
     if file.size > MAX_ALLOWED_SIZE:
-        return {"error": "File size should be less or equal to 5mb"}
+        return JSONResponse({"error": "File size should be less or equal to 5mb"})
     
     try:
         new_file_path = material_service.update_file(file_id, file)
+        if new_file_path is None:
+            return JSONResponse(
+                {"error": "The requested file not found"},
+                status_code=status.HTTP_404_NOT_FOUND
+            )
         if new_file_path:
             return JSONResponse({
                 "message": "file updated successfully",
@@ -89,7 +109,7 @@ def update_file(file_id: int, file: UploadFile = File(...), payload: TokenPayloa
 def delete_file(file_id, payload: TokenPayload = Depends(get_current_user)):
     role_id = payload.role_id
     if role_id == 1:
-        return Response(json.dumps({"error": "only admins and mentors can update lesson materials"}),
+        return JSONResponse({"error": "only admins and mentors can delete lesson materials"},
                         status_code=status.HTTP_403_FORBIDDEN)
     
     if material_service.delete_file(file_id):
