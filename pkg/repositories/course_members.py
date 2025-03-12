@@ -28,9 +28,7 @@ def delete_course_member(course_id: int, member_id: int):
         return True
 
 
-def get_user_role(user_id: int):
+def get_course_members_by_member_id(course_id: int, member_id: int):
     with Session(bind=engine) as db:
-        user = db.query(User).filter(User.id == user_id).first()
-        role = db.query(Role).filter(Role.id == user.role_id).first()
-        print(role.name)
-        return role.name
+        user = db.query(CourseUser).filter(CourseUser.course_id == course_id, CourseUser.user_id == member_id).first()
+        return user
