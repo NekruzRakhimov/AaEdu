@@ -4,28 +4,28 @@ from db.postgres import engine
 from db.models import Homework, CourseUser, Lesson
 
 
+def get_homeworks_by_student(student_id: int):
+    with Session(bind=engine) as db:
+        homeworks = db.query(Homework).filter(Homework.student_id == student_id).all()
+        if not homeworks:
+            return {"error": "No homeworks found for this student"}
+        return homeworks
+
+
+
 def get_course_by_lesson(lesson_id: int):
     with Session(bind=engine) as db:
         lesson = db.query(Lesson).filter(Lesson.id == lesson_id).first()
-        if not lesson:
-            print(f"Lesson with id {lesson_id} not found.")  # Отладка
-        else:
-            print(f"Lesson {lesson_id} is in course {lesson.course_id}.")  # Отладка
         return lesson.course_id if lesson else None
 
 
-def is_mentor_of_course(mentor_id: int, lesson_id: int):
-    """ Проверяет, является ли пользователь ментором курса, в котором находится данный урок. """
-    course_id = get_course_by_lesson(lesson_id)
-    if not course_id:
-        return False
-
+def is_mentor_of_course(mentor_id: int, course_id: int):
     with Session(bind=engine) as db:
-        mentor_count = db.query(CourseUser).filter(
+        return db.query(CourseUser).filter(
             CourseUser.user_id == mentor_id,
             CourseUser.course_id == course_id
-        ).count()
-        return mentor_count > 0
+        ).first() is not None
+
 
 
 def create_homework(homework: Homework):
@@ -33,7 +33,7 @@ def create_homework(homework: Homework):
         db.add(homework)
         db.commit()
         db.refresh(homework)
-        return homework
+        return homework.id
 
 
 def get_homework_by_id(homework_id: int):
@@ -41,9 +41,6 @@ def get_homework_by_id(homework_id: int):
         return db.query(Homework).filter(Homework.id == homework_id).first()
 
 
-def get_homeworks_by_student(student_id: int):
-    with Session(bind=engine) as db:
-        return db.query(Homework).filter(Homework.student_id == student_id).all()
 
 
 def update_homework(homework_id: int, score: float):
@@ -63,6 +60,16 @@ def delete_homework(homework_id: int):
         homework = db.query(Homework).filter(Homework.id == homework_id).first()
         if homework:
             db.delete(homework)
+            db.commit()
+            return True
+        return False
+
+
+def soft_delete_homework(homework_id: int):
+    with Session(bind=engine) as db:
+        homework = db.query(Homework).filter(Homework.id == homework_id).first()
+        if homework:
+            homework.deleted_at = datetime.datetime.now()
             db.commit()
             return True
         return False

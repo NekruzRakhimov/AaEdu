@@ -88,7 +88,7 @@ class Comment(Base):
 
 # Таблица домашних заданий (содержит оценки за выполненные задания)
 class Homework(Base):
-    __tablename__ = "homeworks"
+    __tablename__ = "homeworks"  # Укажите имя таблицы в базе данных
     id = Column(Integer, primary_key=True)
     lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока
     student_id = Column(Integer, ForeignKey("users.id"))  # ID студента
@@ -96,6 +96,9 @@ class Homework(Base):
     score = Column(DECIMAL(5, 2))  # Оценка за задание (0.00 - 100.00)
     submission_date = Column(DateTime, default=datetime.datetime.now)
     mentor_id = Column(Integer, ForeignKey("users.id"))
+    deleted_at = Column(DateTime, nullable=True, default=None)
+    homework = Column(String, nullable=True)
+
 
 
 # Таблица посещаемости (фиксирует, кто посетил урок)
