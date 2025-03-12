@@ -35,7 +35,10 @@ def upload_file(lesson_id: int, file: UploadFile = File(...), payload: TokenPayl
     logger.info(f"file size: {file.size}")
     if file.size > MAX_ALLOWED_SIZE:
         return JSONResponse({"error": "File size should be less or equal to 5mb"})
-    
+
+    if not material_service.get_material_by_filename(file.filename) is None:    
+        return JSONResponse({"error": f"File {file.filename} already exists"})
+
     try:
         material_service.upload_file(lesson_id, file)
         return JSONResponse({

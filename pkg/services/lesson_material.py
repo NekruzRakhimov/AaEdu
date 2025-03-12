@@ -29,6 +29,12 @@ def get_all_materials(lesson_id: int):
     return materials
 
 
+def get_material_by_filename(filename: str):
+    lesson_material = material_repository.get_material_by_filename(filename)
+    logger.info(f"service layer->get_material_by_filename->lesson_material = {lesson_material}")
+    return lesson_material
+
+
 def get_material_by_id(file_id: int):
     lesson_material = material_repository.get_material_by_id(file_id)
     logger.info(f"service layer->get_material_by_id->lesson_material = {lesson_material}")

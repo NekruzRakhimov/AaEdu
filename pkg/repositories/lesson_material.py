@@ -56,6 +56,19 @@ def get_all_materials(lesson_id):
         return {"message": e.args}
     
 
+def get_material_by_filename(filename):
+    with Session(bind=engine) as db:
+        db_material = db.query(LessonMaterial).filter(
+            LessonMaterial.deleted_at == None,
+            LessonMaterial.filename == filename
+        ).first()
+        logger.info(f"query returned: {db_material}")
+        if db_material is None:
+            logger.error(f"Filename {filename} not found")
+            return None
+        return db_material
+    
+
 def get_material_by_id(file_id):
     with Session(bind=engine) as db:
         db_material = db.query(LessonMaterial).filter(
