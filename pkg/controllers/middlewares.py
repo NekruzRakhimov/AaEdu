@@ -5,6 +5,9 @@ from utils.auth import verify_token
 
 # Функция для извлечения пользователя из токена
 def get_current_user(authorization: str = Header(...)):
+    if not authorization:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authorization header is missing")
+
     if not authorization.startswith("Bearer "):  # Проверяем, что токен передан корректно
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Authorization header")
 

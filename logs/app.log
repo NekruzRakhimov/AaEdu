@@ -5,3 +5,23 @@
 2025-03-10 08:41:51,514 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 3 not found
 2025-03-10 08:42:00,714 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 2 not found
 2025-03-10 08:48:38,226 - ERROR - task_manager - get_user_by_username_and_password - Line 22 - Invalid password: 654321
+2025-03-11 14:27:45,779 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 3 not found
+2025-03-11 14:27:52,380 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 3 not found
+2025-03-11 14:30:14,669 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 3 not found
+2025-03-11 14:30:14,670 - ERROR - task_manager - soft_delete_comment - Line 65 - Comment with id 3 not found
+2025-03-11 14:30:21,663 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 4 not found
+2025-03-11 14:30:21,664 - ERROR - task_manager - soft_delete_comment - Line 65 - Comment with id 4 not found
+2025-03-11 14:30:43,022 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 5 not found
+2025-03-11 14:30:43,022 - ERROR - task_manager - soft_delete_comment - Line 65 - Comment with id 5 not found
+2025-03-11 14:31:10,159 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 5 not found
+2025-03-11 14:31:10,159 - ERROR - task_manager - soft_delete_comment - Line 65 - Comment with id 5 not found
+2025-03-11 14:31:25,856 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 5 not found
+2025-03-11 14:31:25,856 - ERROR - task_manager - soft_delete_comment - Line 65 - Comment with id 5 not found
+2025-03-11 14:32:02,797 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 5 not found
+2025-03-12 07:11:23,165 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 1 not found
+2025-03-12 07:17:37,191 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 1 not found
+2025-03-12 09:46:15,035 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 1 not found
+2025-03-12 09:46:24,223 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 1 not found
+2025-03-12 09:47:07,312 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 1 not found
+2025-03-12 09:47:48,929 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 1 not found
+2025-03-12 09:48:09,725 - ERROR - task_manager - get_comment_by_id - Line 41 - Comment with id 1 not found
