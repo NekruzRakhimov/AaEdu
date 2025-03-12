@@ -9,13 +9,12 @@ def get_student_homeworks(user: User):
 
 
 def add_homework(user: User, homework: HomeworkSchema):
-    role = homework_repository.get_user_role(user.id)  # Получаем роль пользователя
-
-    if role != "mentor":  # Проверяем, является ли он ментором
+    role = homework_repository.get_user_role(user.id)
+    if role != "mentor":
         raise HTTPException(status_code=403, detail="Only mentors can add homework")
 
     if not homework_repository.is_mentor_of_course(user.id, homework.lesson_id):
-        raise HTTPException(status_code=403, detail="Only course mentors can grade students")
+        raise HTTPException(status_code=403, detail="Only mentors of the course can grade students")
 
     h = Homework()
     h.course_id = homework.course_id
@@ -32,13 +31,16 @@ def add_homework(user: User, homework: HomeworkSchema):
 def edit_homework(user: User, homework_id: int, score: float):
     role = homework_repository.get_user_role(user.id)
     if role != "mentor":
-        raise HTTPException(status_code=403, detail="Only mentors can add homework")
+        raise HTTPException(status_code=403, detail="Only mentors can edit homework")
+
     homework = homework_repository.get_homework_by_id(homework_id)
     if not homework:
         raise HTTPException(status_code=404, detail="Homework not found")
+
     course_id = homework_repository.get_course_by_lesson(homework.lesson_id)
     if not course_id:
         raise HTTPException(status_code=404, detail="Course not found for this lesson")
+
     if not homework_repository.is_mentor_of_course(user.id, course_id):
         raise HTTPException(status_code=403, detail="Only mentors of the course can edit the homework grade")
 
@@ -47,6 +49,7 @@ def edit_homework(user: User, homework_id: int, score: float):
 
 def remove_homework(user: User, homework_id: int):
     role = homework_repository.get_user_role(user.id)
+
     if role != "mentor":
         raise HTTPException(status_code=403, detail="Only mentors can delete homework")
 
@@ -64,15 +67,16 @@ def remove_homework(user: User, homework_id: int):
     return homework_repository.delete_homework(homework_id)
 
 
-def soft_delete_homework(user: User, homework_id: int):
-    role = homework_repository.get_user_role(user.id)  # Получаем роль пользователя
 
-    if role != "mentor":  # Проверяем, является ли он ментором
+def soft_delete_homework(user: User, homework_id: int):
+    role = homework_repository.get_user_role(user.id)
+
+    if role != "mentor":
         raise HTTPException(status_code=403, detail="Only mentors can soft delete homework")
 
     homework = homework_repository.get_homework_by_id(homework_id)
     if not homework:
-        raise HTTPException(status_code=404, detail="Homework not found.")
+        raise HTTPException(status_code=404, detail="Homework not found")
 
     course_id = homework_repository.get_course_by_lesson(homework.lesson_id)
     if not course_id:
@@ -80,5 +84,4 @@ def soft_delete_homework(user: User, homework_id: int):
 
     if not homework_repository.is_mentor_of_course(user.id, course_id):
         raise HTTPException(status_code=403, detail="Only mentors of the course can delete the homework")
-
     return homework_repository.soft_delete_homework(homework_id)
