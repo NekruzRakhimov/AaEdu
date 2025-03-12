@@ -29,19 +29,27 @@ def get_all_materials(lesson_id: int):
     return materials
 
 
+def get_material_by_filename(filename: str):
+    lesson_material = material_repository.get_material_by_filename(filename)
+    logger.info(f"service layer->get_material_by_filename->lesson_material = {lesson_material}")
+    return lesson_material
+
+
 def get_material_by_id(file_id: int):
     lesson_material = material_repository.get_material_by_id(file_id)
+    logger.info(f"service layer->get_material_by_id->lesson_material = {lesson_material}")
     return lesson_material
 
 
 def replace_file(file_id, file):
-    file_path = material_repository.get_material_by_id(file_id)
-    if file_path is None:
+    file_to_replace = material_repository.get_material_by_id(file_id)
+    logger.info(f"service layer->replace_file->file_to_replace={file_to_replace[0]}")
+    if file_to_replace is None:
         return None
     
     hashed_filename = hash_filename(file.filename)
     file.hashed_filename = hashed_filename
-    return material_repository.replace_file(Path(file_path), file)
+    return material_repository.replace_file(file_to_replace[0], file)
 
 
 def update_file(file_id, file):

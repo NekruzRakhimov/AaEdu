@@ -1,7 +1,0 @@
-2025-03-10 08:40:56,542 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 2 not found
-2025-03-10 08:41:11,086 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 2 not found
-2025-03-10 08:41:28,745 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 1 not found
-2025-03-10 08:41:47,358 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 2 not found
-2025-03-10 08:41:51,514 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 3 not found
-2025-03-10 08:42:00,714 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 2 not found
-2025-03-10 08:48:38,226 - ERROR - task_manager - get_user_by_username_and_password - Line 22 - Invalid password: 654321
