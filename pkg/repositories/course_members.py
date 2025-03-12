@@ -1,4 +1,3 @@
-
 from db.models import CourseUser, User, Role
 from sqlalchemy.orm import Session
 
@@ -23,7 +22,8 @@ def add_course_members(course_id: int, member_id: int):
 
 def delete_course_member(course_id: int, member_id: int):
     with Session(bind=engine) as db:
-        db.delete(CourseUser(course_id=course_id, user_id=member_id))
+        user = db.query(CourseUser).filter(CourseUser.course_id == course_id, CourseUser.user_id == member_id).first()
+        db.delete(user)
         db.commit()
         return True
 

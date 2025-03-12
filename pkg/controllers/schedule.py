@@ -31,8 +31,6 @@ def get_schedule_by_id(course_id: int, schedule_id: int, payload: TokenPayload =
 # Создание расписания (уровень доступа: ментор)
 @router.post("/schedule/{course_id}", summary="Create new schedule", tags=["schedule"])
 def create_schedule(course_id: int, schedule: ScheduleCreate, payload: TokenPayload = Depends(get_current_user)):
-    # TODO: check role
-
     schedule_repository.create_schedule(course_id, schedule)
 
     return JSONResponse({"message": "Schedule created"}, status_code=status.HTTP_201_CREATED)
@@ -41,7 +39,6 @@ def create_schedule(course_id: int, schedule: ScheduleCreate, payload: TokenPayl
 # Обновление расписания (уровень доступа: ментор)
 @router.put("/schedule/{course_id}/{schedule_id}", summary="Update schedule", tags=["schedule"])
 def update_schedule(course_id: int, schedule_id: int, schedule: ScheduleUpdate, payload: TokenPayload = Depends(get_current_user)):
-    # TODO: check role
 
     updated_schedule = schedule_repository.update_schedule(course_id, schedule_id, schedule)
     if updated_schedule is None:

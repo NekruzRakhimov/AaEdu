@@ -1,8 +1,7 @@
 import datetime
 
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime, Text, DECIMAL, MetaData
-from sqlalchemy.schema import CreateSchema
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime, Text, DECIMAL
 
 from db.postgres import engine
 
@@ -21,8 +20,6 @@ class User(Base):
     birth_date = Column(DateTime)  # Дата рождения
     role_id = Column(Integer, ForeignKey("roles.id"), nullable=True)  # ID роли (Один пользователь - одна роль)
     created_at = Column(DateTime, default=datetime.datetime.now)  # Дата создания аккаунта
-    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
-    deleted_at = Column(DateTime, nullable=True)  # Дата удаления (если пользователь был удален)
 
 
 # Таблица ролей (Студент, Преподаватель, Администратор, Родитель)
@@ -30,9 +27,6 @@ class Role(Base):
     __tablename__ = "roles"
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True, nullable=False)  # Название роли
-    created_at = Column(DateTime, default=datetime.datetime.now)  # Дата создания
-    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
-    deleted_at = Column(DateTime, nullable=True)  # Дата удаления
 
 
 # Таблица курсов (каждый курс может содержать несколько уроков)
@@ -41,6 +35,7 @@ class Course(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)  # Название курса
     price = Column(Integer)  # Стоимость курса
+    description = Column(Text, nullable=False)  # Описание курса
     created_at = Column(DateTime, default=datetime.datetime.now)  # Дата создания
     updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
     deleted_at = Column(DateTime, nullable=True)  # Дата удаления
@@ -69,7 +64,8 @@ class Lesson(Base):
 class LessonMaterial(Base):
     __tablename__ = "lesson_materials"
     id = Column(Integer, primary_key=True)
-    lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока, к которому принадлежит материал
+    # ID урока, к которому принадлежит материал
+    lesson_id = Column(Integer, ForeignKey("lessons.id"))
     filename = Column(String)  # имя файла
     hashed_filename = Column(String)  # хэшированное имя файла
     file_size_bytes = Column(Integer)  # размер файла
@@ -83,11 +79,11 @@ class Comment(Base):
     __tablename__ = "comments"
     id = Column(Integer, primary_key=True)
     lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока, к которому принадлежит коммент
-    user_id = Column(Integer, ForeignKey("users.id"))  # ID пользователя, к которому принадлежит коммент
+    user_id = Column(Integer, ForeignKey("users.id"))  # ID пользователя, которому принадлежит коммент
     content = Column(Text, nullable=False)  # Текст комментария
     created_at = Column(DateTime, default=datetime.datetime.now)  # Двта создания
-    # updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
-    # deleted_at = Column(DateTime, nullable=True)  # Дата удаления
+    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
+    deleted_at = Column(DateTime, nullable=True)  # Дата удаления
 
 
 # Таблица домашних заданий (содержит оценки за выполненные задания)
@@ -96,8 +92,9 @@ class Homework(Base):
     id = Column(Integer, primary_key=True)
     lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока
     student_id = Column(Integer, ForeignKey("users.id"))  # ID студента
+    course_id = Column(Integer, ForeignKey("courses.id"))
     score = Column(DECIMAL(5, 2))  # Оценка за задание (0.00 - 100.00)
-    submission_date = Column(DateTime, default=datetime.datetime.now)  # Дата сдачи домашнего задания
+    submission_date = Column(DateTime, default=datetime.datetime.now)
     mentor_id = Column(Integer, ForeignKey("users.id"))
 
 
@@ -107,6 +104,7 @@ class Attendance(Base):
     id = Column(Integer, primary_key=True)
     lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока
     user_id = Column(Integer, ForeignKey("users.id"))  # ID студента
+    course_id = Column(Integer, ForeignKey("courses.id"))  # ID курса
     attended = Column(Boolean)  # Был ли студент на занятии (True = Да, False = Нет)
     attendance_date = Column(DateTime, default=datetime.datetime.now)  # Дата посещения
 
@@ -125,14 +123,16 @@ class StudentPerformance(Base):
 class Event(Base):
     __tablename__ = "events"
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))  # ID пользователя, связанного с событием
-    event_type = Column(String)  # Тип события ('обновление оценки', 'новый урок')
+    # ID пользователя, связанного с событием
+    user_id = Column(Integer, ForeignKey("users.id"))
+    # Тип события ('обновление оценки', 'новый урок')
+    event_type = Column(String)
     event_description = Column(Text)  # Описание события
-    related_id = Column(Integer)  # ID связанного объекта (урока, курса, комментария и т. д.)
+    # ID связанного объекта (урока, курса, комментария и т. д.)
+    related_id = Column(Integer)
     created_at = Column(DateTime, default=datetime.datetime.now)  # Дата события
     updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)  # Дата обновления
     deleted_at = Column(DateTime, nullable=True)  # Дата удаления
-    only_admin_editable = Column(Boolean, default=True)  # Только администратор может редактировать
 
 
 # Таблица расписания (расписание занятий для студентов и преподавателей)
@@ -141,7 +141,7 @@ class Schedule(Base):
     id = Column(Integer, primary_key=True)
     course_id = Column(Integer, ForeignKey("courses.id"))  # ID курса
     lesson_id = Column(Integer, ForeignKey("lessons.id"))  # ID урока
-    teacher_id = Column(Integer, ForeignKey("users.id"))  # ID преподавателя
+    mentor_id = Column(Integer, ForeignKey("users.id"))  # ID преподавателя
     scheduled_time = Column(DateTime, nullable=False)  # Дата и время занятия
 
 
