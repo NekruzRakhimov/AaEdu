@@ -13,17 +13,19 @@ def get_attendance_by_id(user_id, attendance_id):
     return attendance
 
 
-def create_attendance(attendance: AttendanceSchema):
+def create_attendance(user_id, attendance: AttendanceSchema):
+    if user_id == 1:
+        return "You are not allowed to create attendance"
     a = Attendance()
     a.user_id = attendance.user_id
     a.lesson_id = attendance.lesson_id
-    a.attended = attendance.attended
-    a.attendance_date = attendance.attendance_date
-
+    a.course_id = attendance.course_id
     return attendances_repository.create_attendance(a)
 
 
 def update_attendance(user_id, attendance: AttendanceSchema):
+    if user_id == 1:
+        return "You are not allowed to create attendance"
     a = Attendance()
     a.user_id = attendance.user_id
     a.lesson_id = attendance.lesson_id
@@ -32,5 +34,7 @@ def update_attendance(user_id, attendance: AttendanceSchema):
 
 
 def delete_attendance(user_id, attendance_id):
+    if user_id == 1:
+        return "You are not allowed to create attendance"
     attendance = attendances_repository.delete_attendance(user_id, attendance_id)
     return attendance

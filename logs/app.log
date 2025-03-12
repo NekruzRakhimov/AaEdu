@@ -5,3 +5,22 @@
 2025-03-10 08:41:51,514 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 3 not found
 2025-03-10 08:42:00,714 - ERROR - task_manager - get_lesson_by_id - Line 29 - Lesson with id 2 not found
 2025-03-10 08:48:38,226 - ERROR - task_manager - get_user_by_username_and_password - Line 22 - Invalid password: 654321
+2025-03-11 16:16:59,986 - INFO - AaEdu - attendance_rate - Line 13 - Любая информация
+2025-03-12 12:13:26,429 - INFO - AaEdu - attendance_rate - Line 13 - Любая информация
+2025-03-12 12:14:21,325 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 12:14:43,016 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 13:30:22,980 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 14:00:07,349 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 15:31:41,871 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 15:36:48,049 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 15:46:36,724 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 15:47:07,741 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 15:48:46,775 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 15:50:01,027 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 15:51:22,820 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 15:57:51,681 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 16:06:40,055 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 16:07:29,279 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 16:08:35,035 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 16:10:11,180 - INFO - AaEdu - <module> - Line 15 - Любая информация
+2025-03-12 16:12:46,957 - INFO - AaEdu - <module> - Line 15 - Любая информация

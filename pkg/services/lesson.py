@@ -10,7 +10,7 @@ def is_admin_or_metnor(user_id: int):
     if not user:
         return False
 
-    return user.role_id == 1 or user.role_id == 2
+    return user.role_id == 2 or user.role_id == 3
 
 
 def is_user_has_access_to_lesson(user_id: int, course_id: int):

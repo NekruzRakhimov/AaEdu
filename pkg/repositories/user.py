@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from db.postgres import engine
-from db.models import User
+from db.models import User, Role
 
 
 def get_all_users():
@@ -38,3 +38,10 @@ def get_user_by_id(id):
         db_user = db.query(User).filter(User.id == id).first()
 
         return db_user
+
+
+def get_user_role(user_id: int):
+    with Session(bind=engine) as db:
+        user = db.query(User).filter(User.id == user_id).first()
+        role = db.query(Role).filter(Role.id == user.role_id).first()
+        return role.name
