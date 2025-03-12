@@ -32,7 +32,6 @@ def create_lesson(course_id: int, lesson: LessonSchema):
     l = Lesson()
     l.title = lesson.title
     l.description = lesson.description
-    l.content = lesson.content
     l.course_id = course_id
 
     return lesson_repository.create_lesson(l)
