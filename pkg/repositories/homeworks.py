@@ -1,7 +1,14 @@
 import datetime
 from sqlalchemy.orm import Session
 from db.postgres import engine
-from db.models import Homework, CourseUser, Lesson
+from db.models import Homework, CourseUser, Lesson, User, Role
+
+
+def get_user_role(user_id: int):
+    with Session(bind=engine) as db:
+        user = db.query(User).filter(User.id == user_id).first()
+        role = db.query(Role).filter(Role.id == user.role_id).first()
+        return role.name
 
 
 def get_homeworks_by_student(student_id: int):
@@ -10,7 +17,6 @@ def get_homeworks_by_student(student_id: int):
         if not homeworks:
             return {"error": "No homeworks found for this student"}
         return homeworks
-
 
 
 def get_course_by_lesson(lesson_id: int):
@@ -39,8 +45,6 @@ def create_homework(homework: Homework):
 def get_homework_by_id(homework_id: int):
     with Session(bind=engine) as db:
         return db.query(Homework).filter(Homework.id == homework_id).first()
-
-
 
 
 def update_homework(homework_id: int, score: float):
