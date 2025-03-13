@@ -22,7 +22,7 @@ def get_homework_by_student(user_id: int, homework_id: int):
         if not homework:
             return {"error": "No homework found for this student with the given ID"}
 
-        return {"homework": homework.homework}  # Возвращаем нужное поле
+        return {"homework": homework.homework}
 
 
 
