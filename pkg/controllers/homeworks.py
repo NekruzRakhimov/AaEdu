@@ -18,16 +18,25 @@ def is_mentor(payload: TokenPayload = Depends(get_current_user)):
     return payload
 
 
-@router.get("/homeworks", summary="Get student homeworks", tags=["homeworks"])
-def get_homeworks(payload: TokenPayload = Depends(get_current_user)):
+from fastapi import APIRouter, Depends, status
+from fastapi.responses import JSONResponse
+from typing import Union
+
+
+@router.get("/homeworks/{homework_id}", summary="Get student homework", tags=["homeworks"])
+def get_homework(homework_id: int, payload: TokenPayload = Depends(get_current_user)):
     user_id = payload.id
-    logger.info(f"Запрос списка домашних заданий для пользователя {user_id}")
-    homeworks = homework_service.get_student_homeworks(user_id)
-    return Response(
-        json.dumps({"homeworks": homeworks}),
-        status_code=status.HTTP_200_OK,
-        media_type="application/json"
-    )
+    logger.info(f"Запрос домашнего задания {homework_id} для пользователя {user_id}")
+
+    homework = homework_service.get_student_homeworks(user_id, homework_id)
+
+    if not homework:
+        return JSONResponse(
+            content={"error": "Homework not found"},
+            status_code=status.HTTP_404_NOT_FOUND
+        )
+
+    return JSONResponse(content={"homework": homework}, status_code=status.HTTP_200_OK)
 
 
 @router.post("/homeworks", summary="Add homework", tags=["homeworks"])
@@ -39,10 +48,10 @@ def add_homework(homework: HomeworkSchema, payload: TokenPayload = Depends(is_me
         f"с содержимым: {homework.homework}"
     )
     # Передаем user_id (int) и объект схемы homework
-    added_homework = homework_service.add_homework(user_id, homework)
-    logger.info(f"Домашнее задание {added_homework.id} успешно добавлено пользователем {user_id}")
+    homework_id = homework_service.add_homework(user_id, homework)
+    logger.info(f"Домашнее задание успешно добавлено пользователем {user_id}")
     return Response(
-        json.dumps({'message': 'Homework successfully added', 'homework_id': added_homework.id}),
+        json.dumps({'message': 'Homework successfully added', 'homework_id': homework_id}),
         status_code=status.HTTP_201_CREATED,
         media_type="application/json"
     )
