@@ -10,15 +10,15 @@ def get_all():
         course_models_list = db.query(CourseModel).filter(CourseModel.deleted_at == None).all()
         course_list = []
         for course in course_models_list:
-            print(course.name)
             course_list.append(course.name)
         return course_list
 
 
 def get_by_id(course_id: int):
     with Session(bind=engine) as db:
-        return db.query(CourseModel).filter(CourseModel.id == course_id, CourseModel.deleted_at == None).first()
-
+        course = db.query(CourseModel).filter(CourseModel.id == course_id, CourseModel.deleted_at == None).first()
+        print(course)
+        return course
 
 def create(course: CourseModel):
     with Session(bind=engine) as db:
