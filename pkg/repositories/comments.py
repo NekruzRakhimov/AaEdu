@@ -21,10 +21,12 @@ def create_comment(comment: Comment):
         db.refresh(comment_db)
         return comment
 
-def get_comments():
+def get_comments(lesson_id):
     with Session(bind=engine) as db:
         db_comments = db.query(Comment).filter(
-            Comment.deleted_at == None).order_by(desc(Comment.created_at)).all()
+            Comment.deleted_at == None,
+            Comment.lesson_id == lesson_id
+        ).order_by(desc(Comment.created_at)).all()
 
     return db_comments
 

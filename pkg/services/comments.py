@@ -6,8 +6,8 @@ from pkg.repositories import comments as comment_repository
 from pkg.repositories.lesson import get_lesson_by_id
 from schemas.comments import CommentSchema
 
-def get_comments():
-    return comment_repository.get_comments()
+def get_comments(lesson_id: int):
+    return comment_repository.get_comments(lesson_id)
 
 def create_comment(course_id: int, lesson_id: int, comment: CommentSchema):
     lesson = get_lesson_by_id(course_id, lesson_id)

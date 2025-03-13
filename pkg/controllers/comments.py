@@ -11,8 +11,8 @@ from utils.auth import TokenPayload
 router = APIRouter()
 
 @router.get("/lessons{lesson}/comments", summary= "Read comments", tags=["Comments"])
-def get_comments():
-    comments = comment_service.get_comments()
+def get_comments(lesson_id: int):
+    comments = comment_service.get_comments(lesson_id)
     return comments
 
 
@@ -29,7 +29,7 @@ def update_comment(lesson_id: int, comment_id: int, user_id: int, comment: Comme
     if not existing_comment:
         raise HTTPException(status_code=404, detail="Comment not found")
 
-    if payload.user_id != existing_comment.user_id and payload.role_id != 3:
+    if payload.user_id != existing_comment.user_id:
         raise HTTPException(status_code=403, detail="You can only update your own comments")  # Только автор или админ может редактировать комментарий
 
     updated_comment = comment_service.update_comment(lesson_id, comment_id, user_id, comment)
@@ -43,7 +43,7 @@ def soft_delete_comment(lesson_id: int, comment_id: int, user_id: int, payload: 
     if not existing_comment:
         raise HTTPException(status_code=404, detail="Comment not found")
 
-    if payload.user_id != existing_comment.user_id and payload.user_id != 3:
+    if payload.user_id != existing_comment.user_id:
         raise HTTPException(status_code=403, detail="You can only delete your own comments")  # Только автор или админ может удалить комментарий
 
     deleted_comment = comment_service.soft_delete_comment(user_id, lesson_id, comment_id)
