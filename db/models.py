@@ -6,13 +6,9 @@ from sqlalchemy.schema import CreateSchema
 
 from db.postgres import engine
 
-schema_name = 'aa_edu'
-metadata = MetaData(schema=schema_name)
-
 
 class Base(DeclarativeBase):
-    metadata = metadata
-
+    pass
 
 # Таблица пользователей (студенты, родители, преподаватели, администраторы)
 class User(Base):
@@ -177,18 +173,10 @@ class Schedule(Base):
     scheduled_time = Column(DateTime, nullable=False)  # Дата и время занятия
 
 
-def create_schema():
-    try:
-        with engine.connect() as connection:
-            connection.execute(CreateSchema(schema_name, if_not_exists=True))
-            connection.commit()
-    except Exception as e:
-        print(f"Ошибка во время создания схемы: {e}")
-
-
 def migrate_tables():
     try:
-        create_schema()
+        print("Migrating tables...")
+        print(engine.__str__())
         Base.metadata.create_all(bind=engine)
     except Exception as e:
         print(f"Ошибка во время миграции: {e}")

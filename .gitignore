@@ -2,7 +2,7 @@
 .vs
 *.pyc
 /logs
-*__pycache__/
+__pycache__
 .venv
 .vscode
 .pyc
