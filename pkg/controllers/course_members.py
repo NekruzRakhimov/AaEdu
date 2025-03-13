@@ -18,7 +18,7 @@ def add_course_member(course_id: int, member_id: int , payload: TokenPayload = D
     return course_members_service.add_course_member(course_id, member_id, user_id)
 
 
-@router.delete("/{course_id}", summary="Delete member from course")
+@router.delete("/{course_id}/{member_id}", summary="Delete member from course")
 def delete_course_member(course_id: int, member_id: int , payload: TokenPayload = Depends(get_current_user)):
     user_id = payload.id
     result = course_members_service.delete_course_member(course_id, member_id, user_id)

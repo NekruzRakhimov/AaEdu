@@ -1,35 +1,59 @@
+import datetime
+
 from sqlalchemy.orm import Session
-from db.models import Course
-from pkg.schemas.CourseSchemas import CourseCreate, CourseUpdate
-from datetime import datetime
+from db.models import Course as CourseModel
+from db.postgres import engine
 
-class CourseRepository:
-    @staticmethod
-    def get_all(db: Session):
-        return db.query(Course).filter(Course.deleted_at == None).all()
 
-    @staticmethod
-    def get_by_id(db: Session, course_id: int):
-        return db.query(Course).filter(Course.id == course_id, Course.deleted_at == None).first()
+def get_all():
+    with Session(bind=engine) as db:
+        course_models_list = db.query(CourseModel).filter(CourseModel.deleted_at == None).all()
+        course_list = []
+        for course in course_models_list:
+            print(course.name)
+            course_list.append(course.name)
+        return course_list
 
-    @staticmethod
-    def create(db: Session, course_data: CourseCreate):
-        new_course = Course(name=course_data.name)
+
+def get_by_id(course_id: int):
+    with Session(bind=engine) as db:
+        return db.query(CourseModel).filter(CourseModel.id == course_id, CourseModel.deleted_at == None).first()
+
+
+def create(course: CourseModel):
+    with Session(bind=engine) as db:
+        new_course = CourseModel(name=course.name,
+                                 description=course.description,
+                                 price=course.price)
         db.add(new_course)
         db.commit()
         db.refresh(new_course)
-        return new_course
+        return {
+            "message": f"course {new_course.name}  created successfully"
+        }
 
-    @staticmethod
-    def update(db: Session, course, course_data: CourseUpdate):
-        if course_data.name:
-            course.name = course_data.name
-        course.updated_at = datetime.now()
+
+def update(updated_course: CourseModel):
+    with Session(bind=engine) as db:
+        course_to_be_update = db.query(CourseModel).filter(CourseModel.id == updated_course.id).first()
+        course_to_be_update.name = updated_course.name
+        course_to_be_update.price = updated_course.price
+        course_to_be_update.description = updated_course.description
+        course_to_be_update.updated_at = datetime.datetime.now()
+        db.commit()
+        db.refresh(course_to_be_update)
+        return {
+            "message": f"course updated  successfully"
+        }
+
+
+def delete(course_id: int):
+    with Session(bind=engine) as db:
+        course = db.query(CourseModel).filter(CourseModel.id == course_id).first()
+        course.deleted_at = datetime.datetime.now()
         db.commit()
         db.refresh(course)
-        return course
 
-    @staticmethod
-    def delete(db: Session, course):
-        course.deleted_at = datetime.now()
-        db.commit()
+        return {
+            "message": "Course deleted successfully"
+        }

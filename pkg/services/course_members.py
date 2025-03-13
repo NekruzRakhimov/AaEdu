@@ -1,4 +1,5 @@
 from pkg.repositories import course_members as course_members_repositories
+from pkg.repositories import CourseRepository
 from pkg.repositories import user
 
 
