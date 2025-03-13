@@ -10,7 +10,7 @@ def is_admin_or_metnor(user_id: int):
     if not user:
         return False
 
-    return user.role_id == 1 or user.role_id == 2
+    return user.role_id == 2 or user.role_id == 3
 
 
 def is_user_has_access_to_lesson(user_id: int, course_id: int):
@@ -32,7 +32,6 @@ def create_lesson(course_id: int, lesson: LessonSchema):
     l = Lesson()
     l.title = lesson.title
     l.description = lesson.description
-    l.content = lesson.content
     l.course_id = course_id
 
     return lesson_repository.create_lesson(l)

@@ -15,7 +15,6 @@ class Settings(BaseModel):
     auth: AuthSettings
 
 
-# TODO: .env - переменные окружения
 def load_config(path: str = "configs/config.json") -> Settings:
     with open(path, "r", encoding="utf-8") as f:
         config_data = json.load(f)

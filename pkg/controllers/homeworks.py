@@ -29,37 +29,23 @@ def get_homeworks(payload: TokenPayload = Depends(get_current_user)):
         media_type="application/json"
     )
 
-@router.delete("/homeworks/{homework_id}/soft", summary="Soft delete homework", tags=["homeworks"])
-def soft_delete_homework(homework_id: int, payload: TokenPayload = Depends(is_mentor)):
-    user_id = payload.id
-    logger.info(f"Пользователь {user_id} пытается выполнить soft delete домашнего задания {homework_id}")
-    success = homework_service.soft_delete_homework(user_id, homework_id)
-    if not success:
-        logger.error(f"Пользователь {user_id} не нашёл домашнее задание {homework_id} для soft delete")
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Homework not found")
-    logger.info(f"Домашнее задание {homework_id} успешно помечено как удалённое (soft deleted) пользователем {user_id}")
-    return Response(
-        json.dumps({'message': 'Homework successfully soft deleted'}),
-        status_code=status.HTTP_200_OK,
-        media_type="application/json"
-    )
-
 
 @router.post("/homeworks", summary="Add homework", tags=["homeworks"])
 def add_homework(homework: HomeworkSchema, payload: TokenPayload = Depends(is_mentor)):
     user_id = payload.id
     logger.info(
         f"Пользователь {user_id} добавляет домашнее задание для студента {homework.student_id} "
-        f"на урок {homework.lesson_id} с оценкой {homework.score}"
+        f"на урок {homework.lesson_id} с оценкой {homework.score} для курса {homework.course_id} "
+        f"с содержимым: {homework.homework}"
     )
-    added_homework = homework_service.add_homework(user_id, homework.lesson_id, homework.student_id, homework.score)
+    # Передаем user_id (int) и объект схемы homework
+    added_homework = homework_service.add_homework(user_id, homework)
     logger.info(f"Домашнее задание {added_homework.id} успешно добавлено пользователем {user_id}")
     return Response(
         json.dumps({'message': 'Homework successfully added', 'homework_id': added_homework.id}),
         status_code=status.HTTP_201_CREATED,
         media_type="application/json"
     )
-
 
 
 @router.put("/homeworks/{homework_id}", summary="Edit homework", tags=["homeworks"])

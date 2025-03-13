@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from db.postgres import engine
 from db.models import Lesson, Course, CourseUser
 from schemas.lesson import LessonSchema
-from logger.logger import logger
 
 
 def get_lessons(course_id: int):
@@ -24,9 +23,6 @@ def get_lesson_by_id(course_id: int, lesson_id: int):
             Lesson.id == lesson_id,
             Lesson.deleted_at == None
         ).first()
-
-    if db_lesson is None:
-        logger.error(f"Lesson with id {lesson_id} not found")
 
     return db_lesson
 
@@ -48,12 +44,10 @@ def update_lesson(course_id: int, lesson_id: int, lesson: LessonSchema):
         ).first()
 
         if not db_lesson:
-            logger.error(f"Lesson with id {lesson_id} not found")
             return None
 
         db_lesson.title = lesson.title
         db_lesson.description = lesson.description
-        db_lesson.content = lesson.content
 
         db.commit()
 
@@ -68,7 +62,6 @@ def delete_lesson(course_id: int, lesson_id: int):
         ).first()
 
         if not db_lesson:
-            logger.error(f"Lesson with id {lesson_id} not found")
             return None
 
         db_lesson.deleted_at = datetime.datetime.now()

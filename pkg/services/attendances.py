@@ -13,10 +13,9 @@ def get_attendance_by_id(user_id, attendance_id):
     return attendance
 
 
-def create_attendance(role_id, attendance: AttendanceSchema):
-    if role_id == 1:
-        return "you are not allowed to create attendance"
-
+def create_attendance(user_id, attendance: AttendanceSchema):
+    if user_id == 1:
+        return "You are not allowed to create attendance"
     a = Attendance()
     a.user_id = attendance.user_id
     a.lesson_id = attendance.lesson_id
@@ -24,18 +23,18 @@ def create_attendance(role_id, attendance: AttendanceSchema):
     return attendances_repository.create_attendance(a)
 
 
-def update_attendance(role_id, attendance: AttendanceSchema):
-    if role_id == 1:
-        return "You are not allowed to update attendance"
+def update_attendance(user_id, attendance: AttendanceSchema):
+    if user_id == 1:
+        return "You are not allowed to create attendance"
     a = Attendance()
     a.user_id = attendance.user_id
     a.lesson_id = attendance.lesson_id
     a.attended = attendance.attended
-    return attendances_repository.update_attendance(attendance)
+    return attendances_repository.update_attendance(user_id, attendance)
 
 
-def delete_attendance(role_id, attendance_id):
-    if role_id == 1:
-        return "You are not allowed to delete attendance"
-    attendance = attendances_repository.delete_attendance(attendance_id)
+def delete_attendance(user_id, attendance_id):
+    if user_id == 1:
+        return "You are not allowed to create attendance"
+    attendance = attendances_repository.delete_attendance(user_id, attendance_id)
     return attendance

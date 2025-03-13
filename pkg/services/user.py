@@ -38,3 +38,10 @@ def create_user(user: UserSchema):
 
 def get_all_users():
     return user_repository.get_all_users()
+
+
+def admin_or_mentor_permission_check(user_id):
+    if user_repository.get_user_role(user_id) not in ["admin", "mentor"]:
+        return {
+            "message": "Only admin or mentor has permission"
+        }

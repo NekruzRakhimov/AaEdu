@@ -72,7 +72,7 @@ Optional:
 - Логика покупки курсов
 - Интеграция с PulNest для оплаты курсов
 
-Стек: python, postgres, sqlAlchemy, jwt, fastAPI, swagger 2.0 or 3.0
+Стек: python, postgres, sqlAlchemy, jwt, fastAPI, swagger, git
 
 ##### Участники команды:
 - Альминов Руслан
