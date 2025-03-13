@@ -14,11 +14,7 @@ from pkg.controllers.event import router as event_router
 from pkg.controllers.course_members import router as course_members_router
 from pkg.controllers.lesson_material import router as material_router
 from pkg.controllers.student_perfomance import router as student_performance_router
-<<<<<<< HEAD
-# from pkg.controllers.schedule_controller import router as schedule_router
-=======
 
->>>>>>> main
 
 
 
@@ -42,8 +38,4 @@ if __name__ == "__main__":
     app.include_router(material_router)
     app.include_router(course_members_router)
     app.include_router(student_performance_router)
-<<<<<<< HEAD
-    # app.include_router(schedule_router, prefix="/api/v1")
-=======
->>>>>>> main
     uvicorn.run(app, port=settings.port, host=settings.host)
