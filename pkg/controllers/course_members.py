@@ -12,6 +12,7 @@ def course_members(course_id: int):
     members = course_members_service.course_members(course_id)
     return {'members': members}
 
+
 @router.post("/{course_id}/{member_id}", summary="Add member to course")
 def add_course_member(course_id: int, member_id: int, payload: TokenPayload = Depends(get_current_user)):
     user_id = payload.id

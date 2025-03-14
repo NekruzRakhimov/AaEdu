@@ -15,10 +15,6 @@ from pkg.controllers.course_members import router as course_members_router
 from pkg.controllers.lesson_material import router as material_router
 from pkg.controllers.student_perfomance import router as student_performance_router
 
-
-
-
-
 if __name__ == "__main__":
     # Создание таблиц
     migrate_tables()
