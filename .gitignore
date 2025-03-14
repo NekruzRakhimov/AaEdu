@@ -3,6 +3,6 @@
 *.pyc
 /logs
 __pycache__/
-*.pyc
 .venv
 lesson_materials/
+venv.zip

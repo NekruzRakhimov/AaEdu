@@ -45,3 +45,4 @@ def admin_or_mentor_permission_check(user_id):
         return {
             "message": "Only admin or mentor has permission"
         }
+    return None

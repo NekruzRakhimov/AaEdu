@@ -12,7 +12,7 @@ def attendance_rate(course_id: int, student_id: int):
         attendance_rate_in_percents = 100 * (attended_days / len(attendance_rate_list))
 
         return round(attendance_rate_in_percents, 2)
-logger.info("Любая информация")
+
 
 def homework_rate(course_id: int, student_id: int):
     homework_rate_list = student_performance_repositories.get_homework_rate(course_id, student_id)
