@@ -96,7 +96,7 @@ class Homework(Base):
     score = Column(DECIMAL(5, 2))  # Оценка за задание (0.00 - 100.00)
     submission_date = Column(DateTime, default=datetime.datetime.now)
     mentor_id = Column(Integer, ForeignKey("users.id"))
-    deleted_at = Column(DateTime, nullable=True, default=None)
+    deleted_at = Column(DateTime, nullable=False, default=None)
     homework = Column(String, nullable=True)
 
 

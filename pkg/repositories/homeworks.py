@@ -1,15 +1,28 @@
 import datetime
 from sqlalchemy.orm import Session
 from db.postgres import engine
-from db.models import Homework, CourseUser, Lesson
+from db.models import Homework, CourseUser, Lesson, User, Role
 
 
-def get_homeworks_by_student(student_id: int):
+def get_user_role(user_id: int):
     with Session(bind=engine) as db:
-        homeworks = db.query(Homework).filter(Homework.student_id == student_id).all()
-        if not homeworks:
-            return {"error": "No homeworks found for this student"}
-        return homeworks
+        user = db.query(User).filter(User.id == user_id).first()
+        role = db.query(Role).filter(Role.id == user.role_id).first()
+        return role.name
+
+
+def get_homework_by_student(user_id: int, homework_id: int):
+    with Session(bind=engine) as db:
+        homework = (
+            db.query(Homework)
+            .filter(Homework.student_id == user_id, Homework.id == homework_id)
+            .first()
+        )
+
+        if not homework:
+            return {"error": "No homework found for this student with the given ID"}
+
+        return {"homework": homework.homework}
 
 
 
@@ -41,8 +54,6 @@ def get_homework_by_id(homework_id: int):
         return db.query(Homework).filter(Homework.id == homework_id).first()
 
 
-
-
 def update_homework(homework_id: int, score: float):
     with Session(bind=engine) as db:
         homework = db.query(Homework).filter(Homework.id == homework_id).first()
@@ -51,7 +62,7 @@ def update_homework(homework_id: int, score: float):
             homework.updated_at = datetime.datetime.now()
             db.commit()
             db.refresh(homework)
-            return homework
+            return homework.id
         return None
 
 
@@ -61,7 +72,7 @@ def delete_homework(homework_id: int):
         if homework:
             db.delete(homework)
             db.commit()
-            return True
+            return homework.id
         return False
 
 
@@ -71,5 +82,5 @@ def soft_delete_homework(homework_id: int):
         if homework:
             homework.deleted_at = datetime.datetime.now()
             db.commit()
-            return True
+            return homework.id
         return False
